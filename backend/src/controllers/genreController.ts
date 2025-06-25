@@ -47,3 +47,45 @@ export const createGenre: RequestHandler = async (
     });
   }
 };
+
+export const updateGenre: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const genre = await Genre.findById(req.params.id);
+    if (!genre) {
+      res.status(404).json({
+        status: "error",
+        message: "Genre not found",
+        data: null,
+      });
+      return;
+    }
+    const body = genreSchema.parse(req.body);
+
+    const updatedGenre = await Genre.findByIdAndUpdate(genre._id, body, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json({
+      status: "success",
+      message: "Successfully updated genre",
+      data: updatedGenre,
+    });
+  } catch (error: any) {
+    if (error.name === "CastError") {
+      res.status(400).json({
+        status: "error",
+        message: "Invalid Genre ID",
+        data: null,
+      });
+      return;
+    }
+    res.status(500).json({
+      status: "error",
+      message: "Failed to update genre",
+      data: null,
+    });
+  }
+};
