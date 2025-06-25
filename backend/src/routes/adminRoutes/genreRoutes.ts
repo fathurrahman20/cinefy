@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createGenre,
+  deleteGenre,
   getGenre,
   getGenres,
   updateGenre,
@@ -14,5 +15,6 @@ genreRoutes.get("/genres", getGenres);
 genreRoutes.get("/genres/:id", getGenre);
 genreRoutes.post("/genres", validateRequest(genreSchema), createGenre);
 genreRoutes.put("/genres/:id", validateRequest(genreSchema), updateGenre);
+genreRoutes.delete("/genres/:id", deleteGenre);
 
 export default genreRoutes;

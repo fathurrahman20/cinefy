@@ -122,3 +122,39 @@ export const getGenre: RequestHandler = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const deleteGenre: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const genre = await Genre.findById(req.params.id);
+    if (!genre) {
+      res.status(404).json({
+        status: "error",
+        message: "Genre not found",
+        data: null,
+      });
+    }
+
+    await Genre.findByIdAndDelete(genre?._id);
+    res.status(200).json({
+      status: "success",
+      message: "Successfully deleted genre",
+      data: null,
+    });
+  } catch (error: any) {
+    if (error.name === "CastError") {
+      res.status(400).json({
+        status: "error",
+        message: "Invalid Genre ID",
+        data: null,
+      });
+    }
+    res.status(500).json({
+      status: "error",
+      message: "Failed to delete genre",
+      data: null,
+    });
+  }
+};
