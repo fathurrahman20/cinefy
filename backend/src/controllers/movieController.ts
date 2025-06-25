@@ -61,6 +61,7 @@ export const createMovie: RequestHandler = async (
       return;
     }
 
+    // Untuk memastikan menghapus whitespace yang mungkin ada di ID
     const theaterIds = req.body.theaters
       .split(",")
       .map((id: string) => id.trim());
@@ -173,6 +174,47 @@ export const updateMovie: RequestHandler = async (
       return;
     }
 
+    const isGenreExists = await Genre.findById(req.body.genre);
+    if (!isGenreExists) {
+      res.status(404).json({
+        status: "error",
+        message: "Genre not found",
+        data: null,
+      });
+      return;
+    }
+
+    // Untuk membersihkan whitespace yang mungkin ada di ID
+    const theaterIds = req.body.theaters
+      .split(",")
+      .map((id: string) => id.trim());
+    // Untuk validasi apakah setiap ID adalah format ObjectId yang valid
+    const invalidTheaterId = theaterIds.find(
+      (id: string) => !mongoose.Types.ObjectId.isValid(id)
+    );
+    if (invalidTheaterId) {
+      res.status(400).json({
+        status: "error",
+        message: `Invalid Theater ID format: ${invalidTheaterId}`,
+        data: null,
+      });
+      return;
+    }
+
+    // Operator $in untuk mencari multiple IDs
+    const existingTheaters = await Theater.find({
+      _id: { $in: theaterIds },
+    });
+    // Periksa apakah semua theater ID yang diberikan ditemukan
+    if (existingTheaters.length !== theaterIds.length) {
+      res.status(404).json({
+        status: "error",
+        message: "One or more theaters not found",
+        data: null,
+      });
+      return;
+    }
+
     const oldMovie = await Movie.findById(id);
 
     if (!oldMovie) {
@@ -184,28 +226,19 @@ export const updateMovie: RequestHandler = async (
       return;
     }
 
-    const isGenreExists = await Genre.findById(req.body.genre);
-    if (!isGenreExists) {
-      res.status(404).json({
-        status: "error",
-        message: "Genre not found",
-        data: null,
-      });
-      return;
+    if (req.file) {
+      await cloudinary.uploader.destroy(oldMovie.thumbnailId);
+      const { public_id, url } = await cloudinary.uploader.upload(
+        req.file.path,
+        {
+          folder: "cinefy",
+        }
+      );
+      oldMovie.thumbnailId = public_id;
+      oldMovie.thumbnailUrl = url;
     }
 
-    const isTheaterExists = await Theater.findById({
-      _id: req.body.theaters.split(","),
-    });
-    if (!isTheaterExists) {
-      res.status(404).json({
-        status: "error",
-        message: "Theater not found",
-        data: null,
-      });
-      return;
-    }
-
+    // Note: Dibutuhkan jika ingin menyimpan di local: public/uploads/thumbnails
     // if (!req.file) {
     //   const dirname = path.resolve();
     //   const filepath = path.join(
@@ -236,7 +269,8 @@ export const updateMovie: RequestHandler = async (
         genre: parse.data.genre,
         available: parse.data.available,
         theaters: parse.data.theaters,
-        thumbnail: req?.file ? req.file.filename : oldMovie.thumbnailUrl,
+        thumbnailId: oldMovie.thumbnailId,
+        thumbnailUrl: oldMovie.thumbnailUrl,
         description: parse.data.description,
         price: parse.data.price,
         bonus: parse.data.bonus,
@@ -264,6 +298,39 @@ export const updateMovie: RequestHandler = async (
       message: "Failed to update data",
       data: null,
       status: "failed",
+    });
+  }
+};
+
+export const getMovie: RequestHandler = async (req: Request, res: Response) => {
+  try {
+    const movie = await Movie.findById(req.params.id);
+    if (!movie) {
+      res.status(404).json({
+        status: "error",
+        message: "Movie not found",
+        data: null,
+      });
+      return;
+    }
+    res.status(200).json({
+      status: "success",
+      message: "Successfully fetched movie",
+      data: movie,
+    });
+  } catch (error: any) {
+    if (error.name === "CastError") {
+      res.status(400).json({
+        status: "error",
+        message: "Invalid Genre ID",
+        data: null,
+      });
+      return;
+    }
+    res.status(500).json({
+      status: "error",
+      message: "Failed to fetch movie",
+      data: null,
     });
   }
 };

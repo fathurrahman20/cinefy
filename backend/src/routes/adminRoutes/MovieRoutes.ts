@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createMovie,
+  getMovie,
   getMovies,
   updateMovie,
 } from "../../controllers/movieController";
@@ -24,6 +25,7 @@ movieRoutes.use(async (req, res, next) => {
 });
 
 movieRoutes.get("/movies", getMovies);
+movieRoutes.get("/movies/:id", getMovie);
 movieRoutes.post("/movies", upload.single("thumbnail"), createMovie);
 movieRoutes.put("/movies/:id", upload.single("thumbnail"), updateMovie);
 
