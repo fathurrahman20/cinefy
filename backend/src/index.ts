@@ -3,11 +3,14 @@ import dotenv from "dotenv";
 import connectDB from "./utils/database";
 import adminRoutes from "./routes/adminRoutes";
 import bodyParser from "body-parser";
+import path from "path";
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
+
+app.use(express.static(path.join(__dirname, "../public")));
 
 app.use(bodyParser.json());
 

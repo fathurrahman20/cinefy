@@ -1,5 +1,12 @@
 import { z } from "zod";
 
+export const allowedFileTypes = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
+
 export const genreSchema = z
   .object({
     name: z.string().min(3).max(50),
