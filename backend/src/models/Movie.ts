@@ -25,7 +25,15 @@ const movieSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    thumbnail: {
+    // thumbnail: {
+    //   type: String,
+    //   required: true,
+    // },
+    thumbnailId: {
+      type: String,
+      required: true,
+    },
+    thumbnailUrl: {
       type: String,
       required: true,
     },
@@ -34,17 +42,18 @@ const movieSchema = new mongoose.Schema(
     bonus: String,
   },
   {
-    virtuals: {
-      thumbnailUrl: {
-        get() {
-          return `${getAssetUrl()}/${this.thumbnail}`;
-        },
-      },
-    },
+    // Note: Dibutuhkan jika ingin menyimpan di local: public/uploads/thumbnails
+    // virtuals: {
+    //   thumbnailUrl: {
+    //     get() {
+    //       return `${getAssetUrl()}/${this.thumbnail}`;
+    //     },
+    //   },
+    // },
+    // toJSON: {
+    //   virtuals: true,
+    // },
     timestamps: true,
-    toJSON: {
-      virtuals: true,
-    },
   }
 );
 

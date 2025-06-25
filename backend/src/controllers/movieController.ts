@@ -5,6 +5,9 @@ import Genre from "../models/Genre";
 import Theater from "../models/Theater";
 import path from "path";
 import fs from "node:fs";
+// import cloudinary from "../utils/cloudinary";
+import { v2 as cloudinary } from "cloudinary";
+import mongoose from "mongoose";
 
 export const getMovies: RequestHandler = async (
   req: Request,
@@ -45,6 +48,7 @@ export const createMovie: RequestHandler = async (
         message: "No image uploaded, please upload an image",
         data: null,
       });
+      return;
     }
 
     const isGenreExists = await Genre.findById(req.body.genre);
@@ -57,13 +61,31 @@ export const createMovie: RequestHandler = async (
       return;
     }
 
-    const isTheaterExists = await Theater.findById({
-      _id: req.body.theaters.split(","),
+    const theaterIds = req.body.theaters
+      .split(",")
+      .map((id: string) => id.trim());
+    // Untuk validasi apakah setiap ID adalah format ObjectId yang valid
+    const invalidTheaterId = theaterIds.find(
+      (id: string) => !mongoose.Types.ObjectId.isValid(id)
+    );
+    if (invalidTheaterId) {
+      res.status(400).json({
+        status: "error",
+        message: `Invalid Theater ID format: ${invalidTheaterId}`,
+        data: null,
+      });
+      return;
+    }
+
+    // Operator $in untuk mencari multiple IDs
+    const existingTheaters = await Theater.find({
+      _id: { $in: theaterIds },
     });
-    if (!isTheaterExists) {
+    // Periksa apakah semua theater ID yang diberikan ditemukan
+    if (existingTheaters.length !== theaterIds.length) {
       res.status(404).json({
         status: "error",
-        message: "Theater not found",
+        message: "One or more theaters not found",
         data: null,
       });
       return;
@@ -72,7 +94,7 @@ export const createMovie: RequestHandler = async (
     const parse = movieSchema.safeParse({
       title: req.body.title,
       genre: req.body.genre,
-      theaters: req.body.theaters.split(","),
+      theaters: theaterIds,
       description: req.body.description,
       price: Number(req.body.price),
       available: req.body.available === "1" ? true : false,
@@ -90,6 +112,10 @@ export const createMovie: RequestHandler = async (
       return;
     }
 
+    const { public_id, url } = await cloudinary.uploader.upload(req.file.path, {
+      folder: "cinefy",
+    });
+
     const newMovie = new Movie({
       title: parse.data.title,
       genre: parse.data.genre,
@@ -98,7 +124,8 @@ export const createMovie: RequestHandler = async (
       price: parse.data.price,
       available: parse.data.available,
       bonus: parse.data.bonus,
-      thumbnail: req.file?.filename,
+      thumbnailId: public_id,
+      thumbnailUrl: url,
     });
 
     await newMovie.save();
@@ -109,6 +136,7 @@ export const createMovie: RequestHandler = async (
       data: newMovie,
     });
   } catch (error) {
+    console.log(`Errornya: ${error}`);
     res.status(500).json({
       status: "error",
       message: "Failed to create movie",
@@ -178,18 +206,18 @@ export const updateMovie: RequestHandler = async (
       return;
     }
 
-    if (!req.file) {
-      const dirname = path.resolve();
-      const filepath = path.join(
-        dirname,
-        "public/uploads/thumbnails",
-        oldMovie.thumbnail!
-      );
+    // if (!req.file) {
+    //   const dirname = path.resolve();
+    //   const filepath = path.join(
+    //     dirname,
+    //     "public/uploads/thumbnails",
+    //     oldMovie.thumbnail!
+    //   );
 
-      if (fs.existsSync(filepath)) {
-        fs.unlinkSync(filepath);
-      }
-    }
+    //   if (fs.existsSync(filepath)) {
+    //     fs.unlinkSync(filepath);
+    //   }
+    // }
 
     await Genre.findByIdAndUpdate(oldMovie.genre, {
       $pull: { movies: oldMovie._id },
@@ -208,7 +236,7 @@ export const updateMovie: RequestHandler = async (
         genre: parse.data.genre,
         available: parse.data.available,
         theaters: parse.data.theaters,
-        thumbnail: req?.file ? req.file.filename : oldMovie.thumbnail,
+        thumbnail: req?.file ? req.file.filename : oldMovie.thumbnailUrl,
         description: parse.data.description,
         price: parse.data.price,
         bonus: parse.data.bonus,
