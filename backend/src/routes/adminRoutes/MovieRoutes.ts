@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createMovie,
+  deleteMovie,
   getMovie,
   getMovies,
   updateMovie,
@@ -28,5 +29,6 @@ movieRoutes.get("/movies", getMovies);
 movieRoutes.get("/movies/:id", getMovie);
 movieRoutes.post("/movies", upload.single("thumbnail"), createMovie);
 movieRoutes.put("/movies/:id", upload.single("thumbnail"), updateMovie);
+movieRoutes.delete("/movies/:id", deleteMovie);
 
 export default movieRoutes;

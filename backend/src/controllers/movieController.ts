@@ -334,3 +334,53 @@ export const getMovie: RequestHandler = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const deleteMovie: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const movie = await Movie.findById(req.params.id);
+    if (!movie) {
+      res.status(404).json({
+        status: "error",
+        message: "Movie not found",
+        data: null,
+      });
+      return;
+    }
+
+    await cloudinary.uploader.destroy(movie.thumbnailId);
+
+    await Genre.findByIdAndUpdate(movie.genre, {
+      $pull: { movies: movie._id },
+    });
+
+    for (const theater of movie.theaters) {
+      await Theater.findByIdAndUpdate(theater._id, {
+        $pull: { movies: theater._id },
+      });
+    }
+
+    await Movie.findByIdAndDelete(movie?._id);
+    res.status(200).json({
+      status: "success",
+      message: "Successfully deleted movie",
+      data: null,
+    });
+  } catch (error: any) {
+    if (error.name === "CastError") {
+      res.status(400).json({
+        status: "error",
+        message: "Invalid Movie ID",
+        data: null,
+      });
+      return;
+    }
+    res.status(500).json({
+      status: "error",
+      message: "Failed to delete movie",
+      data: null,
+    });
+  }
+};
