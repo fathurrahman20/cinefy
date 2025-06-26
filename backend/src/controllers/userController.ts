@@ -1,6 +1,7 @@
 import type { Request, Response, RequestHandler } from "express";
 import User from "../models/User";
 import WalletTransaction from "../models/WalletTransaction";
+import Transaction from "../models/Transaction";
 
 export const getUsersWithCustomerRole: RequestHandler = async (
   req: Request,
@@ -48,6 +49,39 @@ export const getWalletTransactions: RequestHandler = async (
     res.status(500).json({
       status: "error",
       message: "Failed to fetch wallet transactions",
+      data: null,
+    });
+  }
+};
+
+export const getTransactions: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const transactions = await Transaction.find()
+      .populate({
+        path: "user",
+        select: "name -_id",
+      })
+      .populate({
+        path: "movie",
+        select: "title -_id",
+      })
+      .populate({
+        path: "theater",
+        select: "name -_id",
+      });
+
+    res.status(200).json({
+      status: "success",
+      message: "Successfully fetched transactions",
+      data: transactions,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Failed to fetch transaction",
       data: null,
     });
   }
