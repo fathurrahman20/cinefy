@@ -4,6 +4,7 @@ import connectDB from "./utils/database";
 import adminRoutes from "./routes/adminRoutes";
 import bodyParser from "body-parser";
 import path from "path";
+import authRoutes from "./routes/adminRoutes/authRoutes";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 
 connectDB();
 
+app.use("/api", authRoutes);
 app.use("/api/admin", adminRoutes);
 
 app.get("/", (req: Request, res: Response) => {
