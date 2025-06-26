@@ -3,6 +3,7 @@ import { authSchema } from "../utils/schema";
 import User from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import Wallet from "../models/Wallet";
 
 export const login: RequestHandler = async (req: Request, res: Response) => {
   try {
@@ -62,6 +63,66 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
     res.status(500).json({
       status: "error",
       message: "Failed to login",
+      data: null,
+    });
+  }
+};
+
+export const register: RequestHandler = async (req: Request, res: Response) => {
+  try {
+    const parse = authSchema.omit({ role: true }).safeParse(req.body);
+
+    if (!parse.success) {
+      const errorMessage = parse.error.issues.map(
+        (issue) => `${issue.path}: ${issue.message}`
+      );
+      console.log(`Error: ${parse.error}`);
+      res.status(400).json({
+        status: "error",
+        message: "Invalid request",
+        data: errorMessage,
+      });
+      return;
+    }
+
+    const emailExists = await User.findOne({ email: parse.data.email });
+
+    if (emailExists) {
+      res.status(400).json({
+        status: "error",
+        message: "Email already exists",
+        data: null,
+      });
+      return;
+    }
+
+    const hashPassword = bcrypt.hashSync(parse.data.password, 12);
+
+    const newUser = new User({
+      name: parse.data.name,
+      email: parse.data.email,
+      password: hashPassword,
+      role: "customer",
+    });
+
+    const wallet = new Wallet({
+      user: newUser._id,
+      balance: 0,
+    });
+
+    await newUser.save();
+    await wallet.save();
+
+    res.status(201).json({
+      status: "success",
+      message: "Successfully registered",
+      data: null,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: "error",
+      message: "Failed to register",
       data: null,
     });
   }
