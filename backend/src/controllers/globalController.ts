@@ -1,6 +1,7 @@
 import { Request, RequestHandler, Response } from "express";
 import Movie from "../models/Movie";
 import Genre from "../models/Genre";
+import Transaction from "../models/Transaction";
 
 export const getMovies: RequestHandler = async (
   req: Request,
@@ -117,6 +118,44 @@ export const getMovieDetail: RequestHandler = async (
     res.status(500).json({
       status: "error",
       message: "Failed to fetch movie detail",
+      data: null,
+    });
+  }
+};
+
+export const getAvailableSeats: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { movieId } = req.params;
+    const { date } = req.query;
+
+    const transactions = await Transaction.find({
+      date: date?.toString().replace("+", " "),
+      movie: movieId,
+    })
+      .select("seats")
+      .populate({
+        path: "seats",
+        select: "seat",
+      });
+
+    const seats = [];
+
+    for (const transaction of transactions) {
+      seats.push(...transaction.seats);
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "Successfully fetched available seats",
+      data: seats,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Failed to fetch available seats",
       data: null,
     });
   }

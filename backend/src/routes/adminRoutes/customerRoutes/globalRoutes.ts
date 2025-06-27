@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  getAvailableSeats,
   getGenre,
   getMovieDetail,
   getMovies,
@@ -10,5 +11,6 @@ const globalRoutes = Router();
 globalRoutes.get("/movies", getMovies);
 globalRoutes.get("/genres", getGenre);
 globalRoutes.get("/movies/:id", getMovieDetail);
+globalRoutes.get("check-seats/:movieId", getAvailableSeats);
 
 export default globalRoutes;
