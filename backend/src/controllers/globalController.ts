@@ -2,6 +2,7 @@ import { Request, RequestHandler, Response } from "express";
 import Movie from "../models/Movie";
 import Genre from "../models/Genre";
 import Transaction from "../models/Transaction";
+import Theater from "../models/Theater";
 
 export const getMovies: RequestHandler = async (
   req: Request,
@@ -156,6 +157,93 @@ export const getAvailableSeats: RequestHandler = async (
     res.status(500).json({
       status: "error",
       message: "Failed to fetch available seats",
+      data: null,
+    });
+  }
+};
+
+export const getMoviesFilter: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { genreId } = req.params;
+    const { city, theaters, available } = req.query;
+
+    let filterQuery: any = {};
+
+    if (genreId) {
+      filterQuery = {
+        ...filterQuery,
+        genre: genreId,
+      };
+    }
+
+    if (city) {
+      const theatersList = await Theater.find({
+        city: city,
+      });
+
+      const theaterIds = theatersList.map((theater) => theater.id);
+
+      filterQuery = {
+        ...filterQuery,
+        theaters: {
+          $in: [...theaterIds],
+        },
+      };
+    }
+
+    if (theaters) {
+      const theaterIds2 = theaters as string[];
+
+      filterQuery = {
+        ...filterQuery,
+        theaters: {
+          $in: [...(filterQuery?.theaters.$in ?? []), theaterIds2],
+        },
+      };
+    }
+
+    if (available === "true") {
+      filterQuery = {
+        ...filterQuery,
+        available: true,
+      };
+    }
+
+    const data = await Movie.find({
+      ...filterQuery,
+    })
+      .select("title genre thumbnail")
+      .populate({
+        path: "genre",
+        select: "name",
+      });
+
+    const allData = await Movie.find()
+      .select("title genre theaters thumbnail")
+      .populate({
+        path: "genre",
+        select: "name",
+      })
+      .populate({
+        path: "theaters",
+        select: "city",
+      });
+
+    res.json({
+      status: true,
+      message: "success get filtered movies",
+      data: {
+        filteredMovies: data,
+        allMovies: allData,
+      },
+    });
+  } catch (error) {
+    res.json({
+      status: false,
+      message: "Failed to fetch filtered movies",
       data: null,
     });
   }
