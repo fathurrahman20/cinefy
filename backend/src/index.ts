@@ -5,7 +5,7 @@ import adminRoutes from "./routes/adminRoutes";
 import bodyParser from "body-parser";
 import path from "path";
 import authRoutes from "./routes/adminRoutes/authRoutes";
-import customerRoutes from "./routes/adminRoutes/customerRoutes";
+import customerRoutes from "./routes/customerRoutes";
 
 dotenv.config();
 

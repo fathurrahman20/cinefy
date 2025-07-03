@@ -5,7 +5,7 @@ import {
   getMovieDetail,
   getMovies,
   getMoviesFilter,
-} from "../../../controllers/globalController";
+} from "../../controllers/globalController";
 
 const globalRoutes = Router();
 
