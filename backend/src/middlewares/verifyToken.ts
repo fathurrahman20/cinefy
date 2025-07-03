@@ -14,32 +14,44 @@ export const verifyToken: RequestHandler = async (
 ) => {
   const secretKey = process.env.JWT_SECRET_KEY!;
 
-  if (req.headers?.authorization?.split(" ")[0] === "JWT") {
-    const token = req.headers?.authorization?.split(" ")[1];
-    const decoded = (await jwt.verify(token, secretKey)) as JWTPayload;
+  try {
+    if (req.headers?.authorization?.split(" ")[0] === "JWT") {
+      const token = req.headers?.authorization?.split(" ")[1];
+      const decoded = (await jwt.verify(token, secretKey)) as JWTPayload;
 
-    const user = await User.findById(decoded.data.id);
+      const user = await User.findById(decoded.data.id);
 
-    if (!user) {
+      if (!user) {
+        res.status(401).json({
+          message: "Token invalid",
+        });
+        return;
+      }
+
+      req.user = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      };
+
+      next();
+    } else {
       res.status(401).json({
-        message: "Token invalid",
+        message: "Unauthorized",
       });
       return;
     }
-
-    req.user = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-    };
-
-    next();
-  } else {
-    res.status(401).json({
-      message: "Unauthorized",
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      res.status(401).json({
+        message: "Token expired",
+      });
+      return;
+    }
+    res.status(500).json({
+      message: "Something went wrong",
     });
-    return;
   }
 };
 
