@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import path from "path";
 import authRoutes from "./routes/adminRoutes/authRoutes";
 import customerRoutes from "./routes/customerRoutes";
+import cors from "cors";
 
 dotenv.config();
 
@@ -15,6 +16,8 @@ const port = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, "../public")));
 
 app.use(bodyParser.json());
+
+app.use(cors());
 
 connectDB();
 
