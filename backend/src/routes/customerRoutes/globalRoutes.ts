@@ -7,7 +7,11 @@ import {
   getMoviesFilter,
 } from "../../controllers/globalController";
 import { transactionSchema } from "../../utils/schema";
-import { transactionTicket } from "../../controllers/ticketController";
+import {
+  getOrderDetail,
+  getOrders,
+  transactionTicket,
+} from "../../controllers/ticketController";
 import { validateRequest } from "../../middlewares/validateRequest";
 
 const globalRoutes = Router();
@@ -22,5 +26,7 @@ globalRoutes.post(
   validateRequest(transactionSchema),
   transactionTicket
 );
+globalRoutes.get("/orders", getOrders);
+globalRoutes.get("/orders/:id", getOrderDetail);
 
 export default globalRoutes;

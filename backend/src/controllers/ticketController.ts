@@ -81,3 +81,83 @@ export const transactionTicket: RequestHandler = async (
     });
   }
 };
+
+export const getOrders: RequestHandler = async (
+  req: CustomRequest,
+  res: Response
+) => {
+  try {
+    const transactions = await Transaction.find({
+      user: req.user?.id,
+    })
+      .select("seats movie theater date status")
+      .populate({
+        path: "movie",
+        select: "thumbnail title genre -_id",
+        populate: {
+          path: "genre",
+          select: "name -_id",
+        },
+      })
+      .populate({
+        path: "seats",
+        select: "seat -_id",
+      })
+      .populate({
+        path: "theater",
+        select: "name city -_id",
+      });
+
+    res.status(200).json({
+      status: "success",
+      message: "Successfully fetched transactions",
+      data: transactions,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Failed to fetch transactions",
+      data: null,
+    });
+  }
+};
+
+export const getOrderDetail: RequestHandler = async (
+  req: CustomRequest,
+  res: Response
+) => {
+  try {
+    const { id } = req.params;
+
+    const transaction = await Transaction.findById(id)
+
+      .populate({
+        path: "movie",
+        select: "thumbnail price bonus title genre -_id",
+        populate: {
+          path: "genre",
+          select: "name -_id",
+        },
+      })
+      .populate({
+        path: "seats",
+        select: "seat -_id",
+      })
+      .populate({
+        path: "theater",
+        select: "name city -_id",
+      });
+
+    res.status(200).json({
+      status: "success",
+      message: "Successfully fetched transaction",
+      data: transaction,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Failed to fetch transaction",
+      data: null,
+    });
+  }
+};
