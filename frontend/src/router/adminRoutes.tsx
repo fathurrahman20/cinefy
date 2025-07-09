@@ -41,6 +41,10 @@ const adminRoutes: RouteObject[] = [
         path: "/admin/genres/create",
         element: <AdminGenreForm />,
       },
+      {
+        path: "/admin/genres/edit/:id",
+        element: <AdminGenreForm />,
+      },
     ],
   },
 ];

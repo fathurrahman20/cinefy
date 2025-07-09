@@ -13,3 +13,18 @@ export const createGenre = async (data: GenreValues) => {
   const res = await privateInstance.post(`${endpoint}`, data);
   return res.data;
 };
+
+export const getGenre = async (id: string): Promise<BaseResponse<Genre>> => {
+  const res = await privateInstance.get(`${endpoint}/${id}`);
+  return res.data;
+};
+
+export const updateGenre = async (id: string, data: GenreValues) => {
+  const res = await privateInstance.put(`${endpoint}/${id}`, data);
+  return res.data;
+};
+
+export const deleteGenre = async (id: string) => {
+  const res = await privateInstance.delete(`${endpoint}/${id}`);
+  return res.data;
+};

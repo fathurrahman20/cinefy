@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import type { Genre } from "@/services/auth/genre/genre.type";
 import type { ColumnDef } from "@tanstack/react-table";
+import ActionColumn from "./action-column";
 
 export const columns: ColumnDef<Genre>[] = [
   {
@@ -11,10 +12,9 @@ export const columns: ColumnDef<Genre>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const genre = row.original;
 
-      return "action";
+      return <ActionColumn id={genre._id} />;
     },
   },
 ];

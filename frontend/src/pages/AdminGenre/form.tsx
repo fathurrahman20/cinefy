@@ -10,28 +10,48 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useCreateGenre } from "@/hooks/genre/useCreateGenre";
+import { useGetGenre } from "@/hooks/genre/useGetGenre";
+import { useUpdateGenre } from "@/hooks/genre/useUpdateGenre";
 import { genreSchema, type GenreValues } from "@/lib/validation/genre";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Save } from "lucide-react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router";
 
 export default function AdminGenreForm() {
+  const { id } = useParams<{ id?: string }>();
+  const { data: detailGenre } = useGetGenre(id as string);
+  console.log(` Details" ${JSON.stringify(detailGenre)}`);
   const form = useForm<GenreValues>({
     resolver: zodResolver(genreSchema),
     defaultValues: {
       name: "",
     },
   });
-
-  const { isPending, mutateAsync } = useCreateGenre();
+  useEffect(() => {
+    if (detailGenre) {
+      form.reset({
+        name: detailGenre.name,
+      });
+    }
+  }, [detailGenre, form]);
+  const { isPending: isCreatePending, mutateAsync: createGenre } =
+    useCreateGenre();
+  const { isPending: isUpdatePending, mutateAsync: updateGenre } =
+    useUpdateGenre();
 
   const onSubmit = async (val: GenreValues) => {
-    await mutateAsync(val);
+    if (detailGenre) {
+      return await updateGenre({ id: detailGenre._id, data: val });
+    } else {
+      createGenre(val);
+    }
   };
 
   return (
     <>
-      <PageHeader title="Create Genre" />
+      <PageHeader title={`${detailGenre ? "Edit" : "Create"} Genre`} />
 
       <Form {...form}>
         <form
@@ -51,7 +71,7 @@ export default function AdminGenreForm() {
             )}
           />
 
-          <Button isLoading={isPending}>
+          <Button isLoading={detailGenre ? isUpdatePending : isCreatePending}>
             <Save className="w-4 h-4 mr-2" />
             Submit
           </Button>
