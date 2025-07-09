@@ -4,6 +4,7 @@ import AdminOverview from "@/pages/AdminOverview";
 import AdminLayout from "@/components/admin-layout";
 import { getSession } from "@/lib/utils";
 import AdminGenre from "@/pages/AdminGenre";
+import AdminGenreForm from "@/pages/AdminGenre/form";
 
 const adminRoutes: RouteObject[] = [
   {
@@ -35,6 +36,10 @@ const adminRoutes: RouteObject[] = [
         //   return genres.data;
         // },
         element: <AdminGenre />,
+      },
+      {
+        path: "/admin/genres/create",
+        element: <AdminGenreForm />,
       },
     ],
   },
