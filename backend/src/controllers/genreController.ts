@@ -29,6 +29,18 @@ export const createGenre: RequestHandler = async (
   try {
     const body = genreSchema.parse(req.body);
 
+    const isGenreExists = await Genre.findOne({
+      name: { $regex: new RegExp(body.name, "i") },
+    });
+    if (isGenreExists) {
+      res.status(400).json({
+        status: "error",
+        message: "Genre already exists",
+        data: null,
+      });
+      return;
+    }
+
     // const genre = new Genre(body);
     // const newGenre = await genre.save();
 
