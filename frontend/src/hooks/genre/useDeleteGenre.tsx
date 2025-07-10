@@ -1,5 +1,5 @@
 import { queryClient } from "@/main";
-import { deleteGenre } from "@/services/auth/genre/genre.service";
+import { deleteGenre } from "@/services/genre/genre.service";
 import type { ErrorResponse } from "@/types/response";
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";

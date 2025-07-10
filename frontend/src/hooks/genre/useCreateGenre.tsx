@@ -1,5 +1,5 @@
 import type { GenreValues } from "@/lib/validation/genre";
-import { createGenre } from "@/services/auth/genre/genre.service";
+import { createGenre } from "@/services/genre/genre.service";
 import type { ErrorResponse } from "@/types/response";
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";

@@ -1,5 +1,5 @@
-import { getGenre } from "@/services/auth/genre/genre.service";
-import type { Genre } from "@/services/auth/genre/genre.type";
+import { getGenre } from "@/services/genre/genre.service";
+import type { Genre } from "@/services/genre/genre.type";
 import type { ErrorResponse } from "@/types/response";
 import { useQuery } from "@tanstack/react-query";
 import type { AxiosError } from "axios";

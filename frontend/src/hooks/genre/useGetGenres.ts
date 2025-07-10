@@ -1,5 +1,5 @@
-import { getGenres } from "@/services/auth/genre/genre.service";
-import type { Genre } from "@/services/auth/genre/genre.type";
+import { getGenres } from "@/services/genre/genre.service";
+import type { Genre } from "@/services/genre/genre.type";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetGenres = () => {
