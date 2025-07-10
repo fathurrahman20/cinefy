@@ -22,7 +22,6 @@ import { useParams } from "react-router";
 export default function AdminGenreForm() {
   const { id } = useParams<{ id?: string }>();
   const { data: detailGenre } = useGetGenre(id as string);
-  console.log(` Details" ${JSON.stringify(detailGenre)}`);
   const form = useForm<GenreValues>({
     resolver: zodResolver(genreSchema),
     defaultValues: {
