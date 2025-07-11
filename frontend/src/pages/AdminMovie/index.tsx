@@ -8,6 +8,7 @@ import { useGetMovies } from "@/hooks/movie/useGetMovies";
 
 export default function AdminMovie() {
   const { data: movies } = useGetMovies();
+
   return (
     <>
       <PageHeader title="Movie List" />

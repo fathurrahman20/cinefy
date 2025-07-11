@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { formatIdr } from "@/lib/utils";
 import type { Movie } from "@/services/movie/movie.type";
 import type { ColumnDef } from "@tanstack/react-table";
+import ActionColumn from "./action-column";
 
 export const columns: ColumnDef<Movie>[] = [
   {
@@ -67,7 +68,7 @@ export const columns: ColumnDef<Movie>[] = [
     cell: ({ row }) => {
       const movie = row.original;
 
-      return "action";
+      return <ActionColumn id={movie._id} />;
     },
   },
 ];

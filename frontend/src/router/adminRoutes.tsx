@@ -69,6 +69,10 @@ const adminRoutes: RouteObject[] = [
         path: "/admin/movies/create",
         element: <AdminMovieForm />,
       },
+      {
+        path: "/admin/movies/edit/:id",
+        element: <AdminMovieForm />,
+      },
     ],
   },
 ];

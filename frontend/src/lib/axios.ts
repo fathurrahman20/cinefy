@@ -5,12 +5,12 @@ const baseUrl = import.meta.env.VITE_API_URL!;
 
 export const globalInstance = axios.create({
   baseURL: baseUrl,
-  timeout: 3000,
+  timeout: 10000, // 10 second
 });
 
 export const privateInstance = axios.create({
   baseURL: baseUrl,
-  timeout: 3000,
+  timeout: 10000, // 10 second
 });
 
 privateInstance.interceptors.request.use((config) => {

@@ -21,37 +21,62 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useGetGenres } from "@/hooks/genre/useGetGenres";
 import { useCreateMovie } from "@/hooks/movie/useCreateMovie";
+import { useGetMovie } from "@/hooks/movie/useGetMovie";
+import { useUpdateMovie } from "@/hooks/movie/useUpdateMovie";
 import { useGetTheaters } from "@/hooks/theater/useGetTheaters";
 import { movieSchema, type MovieValues } from "@/lib/validation/movie";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Save } from "lucide-react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
-import { toast } from "sonner";
+import { useParams } from "react-router";
 
+const updateMovieSchema = movieSchema.partial({ thumbnail: true });
 export default function AdminMovieForm() {
-  const { data: genres } = useGetGenres();
-  const { data: theaters } = useGetTheaters();
+  const { id } = useParams<{ id?: string }>();
+  const { data: genres, isLoading: isLoadingGenres } = useGetGenres();
+  const { data: theaters, isLoading: isLoadingTheaters } = useGetTheaters();
+  const { data: detail, isLoading: isMovieDetailLoading } = useGetMovie(
+    id as string
+  );
 
   const form = useForm<MovieValues>({
-    resolver: zodResolver(movieSchema),
+    resolver: zodResolver(id ? updateMovieSchema : movieSchema),
     defaultValues: {
+      genre: "",
       theaters: [],
       title: "",
-      // available: "",
+      available: false,
       bonus: "",
-      genre: "",
       description: "",
       price: "",
     },
   });
 
-  const { isPending, mutateAsync } = useCreateMovie();
+  useEffect(() => {
+    if (detail && !isMovieDetailLoading && theaters && genres) {
+      form.reset({
+        theaters:
+          detail === null ? [] : detail.theaters?.map((theater) => theater._id),
+        title: detail.title,
+        available: detail.available,
+        bonus: detail.bonus,
+        genre: detail.genre._id,
+        description: detail.description,
+        price: detail.price ? detail.price.toString() : undefined,
+      });
+    }
+  }, [detail, form, isMovieDetailLoading, theaters, genres]);
+
+  const { isPending: isCreatePending, mutateAsync: createMovie } =
+    useCreateMovie();
+  const { isPending: isUpdatePending, mutateAsync: updateMovie } =
+    useUpdateMovie();
 
   const selectedTheaters = form.watch("theaters");
 
   const handleChangeTheater = (val: string) => {
-    if (!selectedTheaters?.includes(val)) {
+    if (!selectedTheaters.includes(val)) {
       const newTheaters = [...selectedTheaters, val];
 
       form.setValue("theaters", newTheaters);
@@ -63,8 +88,6 @@ export default function AdminMovieForm() {
 
     form.setValue("theaters", updatedTheaters);
   };
-
-  const navigate = useNavigate();
 
   const onSubmit = async (val: MovieValues) => {
     const formData = new FormData();
@@ -88,16 +111,16 @@ export default function AdminMovieForm() {
       formData.append("bonus", val.bonus);
     }
 
-    await mutateAsync(formData);
-
-    navigate("/admin/movies");
-
-    toast.success(`Movie data created successfully`);
+    if (id) {
+      await updateMovie({ id: id as string, data: formData });
+    } else {
+      await createMovie(formData);
+    }
   };
 
   return (
     <>
-      <PageHeader title="Create Movie Data" />
+      <PageHeader title={`${detail ? "Edit" : "Create"} Movie Data`} />
 
       <Form {...form}>
         <form
@@ -166,7 +189,8 @@ export default function AdminMovieForm() {
                 <FormLabel>Genre</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}>
+                  value={field.value}
+                  disabled={isLoadingGenres && id ? true : false}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select movie genre" />
@@ -191,7 +215,9 @@ export default function AdminMovieForm() {
             render={() => (
               <FormItem>
                 <FormLabel>Theaters</FormLabel>
-                <Select onValueChange={handleChangeTheater}>
+                <Select
+                  onValueChange={handleChangeTheater}
+                  disabled={isLoadingTheaters && id ? true : false}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select movie theaters" />
@@ -208,15 +234,18 @@ export default function AdminMovieForm() {
 
                 {selectedTheaters?.length > 0 && (
                   <div className="inline-flex items-center space-x-2">
-                    {selectedTheaters.map((selectedTheater, i) => (
+                    {selectedTheaters?.map((selectedTheater, i) => (
                       <Badge
                         onClick={() => handleRemoveTheater(selectedTheater)}
-                        key={`${selectedTheater + i}`}>
-                        {
+                        key={i}
+                        className="cursor-pointer">
+                        {theaters?.find(
+                          (theater) => theater._id === selectedTheater
+                        )?.name +
+                          " - " +
                           theaters?.find(
                             (theater) => theater._id === selectedTheater
-                          )?.name
-                        }
+                          )?.city}
                       </Badge>
                     ))}
                   </div>
@@ -281,7 +310,7 @@ export default function AdminMovieForm() {
             )}
           />
 
-          <Button isLoading={isPending}>
+          <Button isLoading={id ? isUpdatePending : isCreatePending}>
             <Save className="w-4 h-4 mr-2" />
             Submit
           </Button>

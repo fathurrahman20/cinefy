@@ -304,7 +304,15 @@ export const updateMovie: RequestHandler = async (
 
 export const getMovie: RequestHandler = async (req: Request, res: Response) => {
   try {
-    const movie = await Movie.findById(req.params.id);
+    const movie = await Movie.findById(req.params.id)
+      .populate({
+        path: "genre",
+        select: "name",
+      })
+      .populate({
+        path: "theaters",
+        select: "name city",
+      });
     if (!movie) {
       res.status(404).json({
         status: "error",
