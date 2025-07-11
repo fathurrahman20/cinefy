@@ -21,7 +21,7 @@ export const getMovies: RequestHandler = async (
       })
       .populate({
         path: "theaters",
-        select: "name",
+        select: "name city",
       });
     res.status(200).json({
       status: "success",
