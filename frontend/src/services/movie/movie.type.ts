@@ -5,7 +5,7 @@ export interface Movie {
   _id: string;
   title: string;
   genre: Pick<Genre, "_id" | "name">;
-  theaters: Pick<Theater, "_id" | "name">[];
+  theaters: Pick<Theater, "_id" | "name" | "city">[];
   description: string;
   thumbnail: string;
   price: number;

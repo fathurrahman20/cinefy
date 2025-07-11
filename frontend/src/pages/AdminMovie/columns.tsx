@@ -18,7 +18,7 @@ export const columns: ColumnDef<Movie>[] = [
             className="w-[100px]"
           />
 
-          <div className="space-y-3">
+          <div className="space-y-3 max-w-sm">
             <div>
               <h4>{movie.title}</h4>
               <p>{movie.description}</p>
@@ -55,7 +55,7 @@ export const columns: ColumnDef<Movie>[] = [
         <div className="flex flex-col items-center gap-4">
           {movie.theaters.map((item) => (
             <Badge variant="outline" key={item._id}>
-              {item.name}
+              {item.name} - {item.city}
             </Badge>
           ))}
         </div>
