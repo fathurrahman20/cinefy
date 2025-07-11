@@ -9,6 +9,7 @@ import AdminTheater from "@/pages/AdminTheater";
 import AdminTheaterForm from "@/pages/AdminTheater/form";
 import AdminMovie from "@/pages/AdminMovie";
 import AdminMovieForm from "@/pages/AdminMovie/form";
+import AdminCustomer from "@/pages/AdminCustomer";
 
 const adminRoutes: RouteObject[] = [
   {
@@ -72,6 +73,10 @@ const adminRoutes: RouteObject[] = [
       {
         path: "/admin/movies/edit/:id",
         element: <AdminMovieForm />,
+      },
+      {
+        path: "/admin/customers",
+        element: <AdminCustomer />,
       },
     ],
   },
