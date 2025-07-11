@@ -19,3 +19,16 @@ export interface Transaction {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface Wallet {
+  user: Pick<User, "name">;
+}
+
+export interface WalletTransaction {
+  _id: string;
+  wallet: Wallet;
+  price: number;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}

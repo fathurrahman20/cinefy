@@ -11,6 +11,7 @@ import AdminMovie from "@/pages/AdminMovie";
 import AdminMovieForm from "@/pages/AdminMovie/form";
 import AdminCustomer from "@/pages/AdminCustomer";
 import AdminTransaction from "@/pages/AdminTransaction";
+import AdminWalletTransaction from "@/pages/AdminWalletTransaction";
 
 const adminRoutes: RouteObject[] = [
   {
@@ -86,6 +87,10 @@ const adminRoutes: RouteObject[] = [
       {
         path: "/admin/transactions",
         element: <AdminTransaction />,
+      },
+      {
+        path: "/admin/wallet-transactions",
+        element: <AdminWalletTransaction />,
       },
     ],
   },
