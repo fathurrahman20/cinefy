@@ -16,11 +16,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import {
-  login,
-  loginSchema,
-  type LoginValues,
-} from "@/services/auth/auth.service";
+import { loginSchema, type LoginValues } from "@/lib/validation/auth";
+import { login } from "@/services/auth/auth.service";
 import type { ErrorResponse } from "@/types/response";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";

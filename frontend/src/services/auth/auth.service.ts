@@ -1,21 +1,15 @@
 import { globalInstance } from "@/lib/axios";
 import type { BaseResponse } from "@/types/response";
-import { z } from "zod";
 import type { LoginResponse } from "./auth.type";
-
-export const authSchema = z.object({
-  name: z.string().min(5),
-  email: z.string().email(),
-  password: z.string().min(5),
-  role: z.enum(["admin", "customer"]),
-});
-
-export const loginSchema = authSchema.omit({ name: true });
-
-export type LoginValues = z.infer<typeof loginSchema>;
+import type { LoginValues, RegisterValues } from "@/lib/validation/auth";
 
 export const login = async (
   data: LoginValues
 ): Promise<BaseResponse<LoginResponse>> => {
   return globalInstance.post("/auth/login", data).then((res) => res.data);
+};
+export const register = async (
+  data: RegisterValues
+): Promise<BaseResponse<null>> => {
+  return globalInstance.post("/auth/register", data).then((res) => res.data);
 };
