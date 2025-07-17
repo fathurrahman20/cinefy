@@ -7,6 +7,9 @@ import path from "path";
 import authRoutes from "./routes/adminRoutes/authRoutes";
 import customerRoutes from "./routes/customerRoutes";
 import cors from "cors";
+import { getGenre, getGenres } from "./controllers/genreController";
+import { getMovie, getMovies } from "./controllers/movieController";
+import { getTheater, getTheaters } from "./controllers/theaterController";
 
 dotenv.config();
 
@@ -22,6 +25,12 @@ app.use(cors());
 connectDB();
 
 app.use("/api", authRoutes);
+app.get("/api/genres", getGenres);
+app.get("/api/genres/:id", getGenre);
+app.get("/api/movies", getMovies);
+app.get("/api/movies/:id", getMovie);
+app.get("/api/theaters", getTheaters);
+app.get("/api/theaters/:id", getTheater);
 app.use("/api/admin", adminRoutes);
 app.use("/api/customer", customerRoutes);
 
