@@ -3,8 +3,14 @@ import type { Movie } from "./movie.type";
 import { globalInstance, privateInstance } from "@/lib/axios";
 
 const endpoint = "/admin/movies";
-export const getMovies = async (): Promise<BaseResponse<Movie[]>> => {
-  const res = await globalInstance.get(`/movies`);
+export const getMovies = async (
+  available?: string
+): Promise<BaseResponse<Movie[]>> => {
+  const res = await globalInstance.get(`/movies`, {
+    params: {
+      available,
+    },
+  });
   return res.data;
 };
 
