@@ -14,7 +14,16 @@ export const getMovies: RequestHandler = async (
   res: Response
 ) => {
   try {
-    const Movies = await Movie.find()
+    const filter: any = {};
+
+    const { available } = req.query;
+
+    if (available !== undefined) {
+      // Convert the string 'true' or 'false' to a boolean
+      // If 'available' is anything other than "true" (case-insensitive), it will be false
+      filter.available = String(available).toLowerCase() === "true";
+    }
+    const Movies = await Movie.find(filter)
       .populate({
         path: "genre",
         select: "name",
