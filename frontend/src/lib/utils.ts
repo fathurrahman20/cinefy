@@ -34,3 +34,7 @@ export function formatIdr(idr: number) {
 export function formatDate(date: Date | string) {
   return dayjs(date).format("DD MMMM YYYY");
 }
+
+export function generateUserPhoto(name: string | undefined = "User") {
+  return `https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=${name}&size=64`;
+}

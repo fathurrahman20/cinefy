@@ -1,3 +1,4 @@
+import CustomerHome from "@/pages/CustomerHome";
 import CustomerLogin from "@/pages/CustomerLogin";
 import CustomerRegister from "@/pages/CustomerRegister";
 import type { RouteObject } from "react-router";
@@ -10,6 +11,10 @@ const customerRoutes: RouteObject[] = [
   {
     path: "/login",
     element: <CustomerLogin />,
+  },
+  {
+    path: "/",
+    element: <CustomerHome />,
   },
 ];
 

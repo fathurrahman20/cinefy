@@ -1,11 +1,11 @@
 import type { BaseResponse } from "@/types/response";
 import type { Theater } from "./theater.type";
-import { privateInstance } from "@/lib/axios";
+import { globalInstance, privateInstance } from "@/lib/axios";
 import type { TheaterValues } from "@/lib/validation/theater";
 
 const endpoint = "/admin/theaters";
 export const getTheaters = async (): Promise<BaseResponse<Theater[]>> => {
-  const res = await privateInstance.get(`${endpoint}`);
+  const res = await globalInstance.get(`/theaters`);
   return res.data;
 };
 
@@ -17,7 +17,7 @@ export const createTheater = async (data: TheaterValues) => {
 export const getTheater = async (
   id: string
 ): Promise<BaseResponse<Theater>> => {
-  const res = await privateInstance.get(`${endpoint}/${id}`);
+  const res = await globalInstance.get(`/theaters/${id}`);
   return res.data;
 };
 

@@ -1,10 +1,10 @@
 import type { BaseResponse } from "@/types/response";
 import type { Movie } from "./movie.type";
-import { privateInstance } from "@/lib/axios";
+import { globalInstance, privateInstance } from "@/lib/axios";
 
 const endpoint = "/admin/movies";
 export const getMovies = async (): Promise<BaseResponse<Movie[]>> => {
-  const res = await privateInstance.get(`${endpoint}`);
+  const res = await globalInstance.get(`/movies`);
   return res.data;
 };
 
@@ -18,7 +18,7 @@ export const createMovie = async (data: FormData) => {
 };
 
 export const getMovie = async (id: string): Promise<BaseResponse<Movie>> => {
-  const res = await privateInstance.get(`${endpoint}/${id}`);
+  const res = await globalInstance.get(`/movies/${id}`);
   return res.data;
 };
 
