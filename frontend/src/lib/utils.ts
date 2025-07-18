@@ -4,6 +4,8 @@ import secureLocalStorage from "react-secure-storage";
 import type { LoginResponse } from "@/services/auth/auth.type";
 import dayjs from "dayjs";
 
+export const CITIES = ["Jakarta", "Bandung", "Bekasi", "Depok", "Bogor"];
+
 export const SESSION_KEY = "SESSION_KEY";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

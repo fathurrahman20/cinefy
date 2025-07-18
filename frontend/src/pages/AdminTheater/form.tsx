@@ -25,6 +25,7 @@ import { Save } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router";
+import { CITIES } from "@/lib/utils";
 
 export default function AdminTheaterForm() {
   const { id } = useParams<{ id?: string }>();
@@ -48,8 +49,6 @@ export default function AdminTheaterForm() {
     useCreateTheater();
   const { isPending: isUpdatePending, mutateAsync: updateTheater } =
     useUpdateTheater();
-
-  const cities = ["Jakarta", "Bandung", "Bekasi", "Depok", "Bogor"];
 
   const onSubmit = async (val: TheaterValues) => {
     if (detailTheater) {
@@ -95,7 +94,7 @@ export default function AdminTheaterForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {cities.map((city, i) => (
+                    {CITIES.map((city, i) => (
                       <SelectItem key={`${city + i}`} value={city}>
                         {city}
                       </SelectItem>
