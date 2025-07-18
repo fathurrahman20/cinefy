@@ -215,14 +215,14 @@ export const getMoviesFilter: RequestHandler = async (
     const data = await Movie.find({
       ...filterQuery,
     })
-      .select("title genre thumbnail")
+      .select("title genre thumbnailUrl")
       .populate({
         path: "genre",
         select: "name",
       });
 
     const allData = await Movie.find()
-      .select("title genre theaters thumbnail")
+      .select("title genre theaters thumbnailUrl")
       .populate({
         path: "genre",
         select: "name",
