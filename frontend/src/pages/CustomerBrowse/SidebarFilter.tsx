@@ -1,6 +1,15 @@
 import { useGetGenres } from "@/hooks/genre/useGetGenres";
 import { useGetTheaters } from "@/hooks/theater/useGetTheaters";
 import { CITIES, cn } from "@/lib/utils";
+import { setFilter } from "@/redux/features/filter/filterSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+  filterSchema,
+  type FilterValues,
+} from "@/services/global/global.service";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router";
 
 interface SidebarFilterProps {
   onCancel: () => void;
@@ -9,8 +18,45 @@ interface SidebarFilterProps {
 }
 
 export default function SidebarFilter({ onCancel, show }: SidebarFilterProps) {
+  const { genreId } = useParams();
+  const navigate = useNavigate();
+
   const { data: genres } = useGetGenres();
   const { data: theaters } = useGetTheaters();
+
+  const dispatch = useAppDispatch();
+  const filter = useAppSelector((state) => state.filter.data);
+
+  const { register, handleSubmit } = useForm<FilterValues>({
+    resolver: zodResolver(filterSchema),
+    defaultValues: {
+      city: filter?.city,
+      theaters: filter?.theaters ?? [],
+      availability: "1",
+      genre: genreId,
+    },
+  });
+
+  const onSubmit = (data: FilterValues) => {
+    dispatch(
+      setFilter({
+        data: {
+          availability: data.availability === "1" ? true : false,
+          city: data.city ?? undefined,
+          // genre: data.genre ?? undefined,
+          theaters: data.theaters ?? undefined,
+        },
+      })
+    );
+
+    onCancel();
+
+    const body = document.getElementsByTagName("body")[0];
+    body.classList.toggle("overflow-hidden");
+
+    navigate(`/browse/${data.genre}`);
+  };
+
   return (
     <div className="filter-sidebar-container relative w-full text-black">
       <div
@@ -51,15 +97,20 @@ export default function SidebarFilter({ onCancel, show }: SidebarFilterProps) {
             </p>
             <div className="dummy-button w-12" />
           </div>
-          <form className="flex flex-col gap-[30px] px-5 mt-[30px] mb-[110px]">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-[30px] px-5 mt-[30px] mb-[110px]">
             <div className="flex flex-col gap-3">
               <p className="font-semibold text-premiere-black">Genre</p>
               {genres?.map((item) => (
                 <label key={item._id} className="flex items-center gap-[10px]">
                   <input
+                    id="candidates"
                     type="radio"
                     value={item._id}
-                    className="w-6 h-6 rounded-full appearance-none checked:border-4 checked:border-solid checked:border-white checked:bg-premiere-purple ring-1 ring-premiere-purple transition-all duration-300"
+                    aria-describedby="candidates-description"
+                    className="relative size-6 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden [&:not(:checked)]:before:hidden"
+                    {...register("genre")}
                   />
                   <p className="font-semibold text-premiere-black">
                     {item.name}
@@ -76,7 +127,8 @@ export default function SidebarFilter({ onCancel, show }: SidebarFilterProps) {
                   <input
                     type="radio"
                     value={item}
-                    className="w-6 h-6 rounded-full appearance-none checked:border-4 checked:border-solid checked:border-white checked:bg-premiere-purple ring-1 ring-premiere-purple transition-all duration-300"
+                    className="relative size-6 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden [&:not(:checked)]:before:hidden"
+                    {...register("city")}
                   />
                   <p className="font-semibold text-premiere-black">{item}</p>
                 </label>
@@ -89,7 +141,8 @@ export default function SidebarFilter({ onCancel, show }: SidebarFilterProps) {
                   <input
                     type="checkbox"
                     value={item._id}
-                    className="w-6 h-6 rounded-lg appearance-none checked:border-4 checked:border-solid checked:border-white checked:bg-premiere-purple ring-1 ring-premiere-purple transition-all duration-300"
+                    className="size-6 col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
+                    {...register("theaters")}
                   />
                   <p className="font-semibold text-premiere-black">
                     {item.name}
@@ -103,7 +156,8 @@ export default function SidebarFilter({ onCancel, show }: SidebarFilterProps) {
                 <input
                   type="radio"
                   value={"1"}
-                  className="w-6 h-6 rounded-full appearance-none checked:border-4 checked:border-solid checked:border-white checked:bg-premiere-purple ring-1 ring-premiere-purple transition-all duration-300"
+                  className="relative size-6 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden [&:not(:checked)]:before:hidden"
+                  {...register("availability")}
                 />
                 <p className="font-semibold text-premiere-black">
                   Available Now
@@ -113,7 +167,8 @@ export default function SidebarFilter({ onCancel, show }: SidebarFilterProps) {
                 <input
                   type="radio"
                   value={"0"}
-                  className="w-6 h-6 rounded-full appearance-none checked:border-4 checked:border-solid checked:border-white checked:bg-premiere-purple ring-1 ring-premiere-purple transition-all duration-300"
+                  className="relative size-6 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden [&:not(:checked)]:before:hidden"
+                  {...register("availability")}
                 />
                 <p className="font-semibold text-premiere-black">Coming Soon</p>
               </label>

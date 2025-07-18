@@ -1,26 +1,43 @@
 import { getMovieByGenre } from "@/services/global/global.service";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SidebarFilter from "./SidebarFilter";
+import { useAppSelector } from "@/redux/hooks";
+import { useGetGenres } from "@/hooks/genre/useGetGenres";
+import { useGetTheaters } from "@/hooks/theater/useGetTheaters";
 
 export default function CustomerBrowseGenre() {
   const [show, setShowFilter] = useState<boolean>(false);
   const { genreId } = useParams();
 
+  const { data: genres } = useGetGenres();
+  const { data: theaters } = useGetTheaters();
+
+  const filter = useAppSelector((state) => state.filter.data);
+
   const { data, isLoading } = useQuery({
     queryKey: ["browse-movies", genreId],
-    queryFn: () => getMovieByGenre(genreId ?? ""),
+    queryFn: () => getMovieByGenre(genreId ?? "", filter),
   });
+
+  const selectedGenre = useMemo(() => {
+    if (!genreId) {
+      return null;
+    }
+
+    return genres?.find((genre) => genre._id === genreId);
+  }, [genreId, genres]);
 
   if (isLoading) {
     return (
-      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+      <div className=" bg-[linear-gradient(90deg,_#000000_40.82%,_#0E0E24_99.88%)] text-white fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         Loading...
       </div>
     );
   }
+
   return (
     <div
       id="Content-Container"
@@ -38,32 +55,39 @@ export default function CustomerBrowseGenre() {
           />
         </Link>
         <p className="text-center mx-auto font-semibold text-sm">
-          {/* {selectedGenre ? selectedGenre.name : ""} Genre */}
+          {selectedGenre ? selectedGenre.name : ""} Genre
         </p>
         <div className="dummy-button w-12" />
       </div>
       <section className="flex items-center gap-3 flex-wrap px-5 mt-5">
         <p className="font-semibold">Filters</p>
         <div className="flex rounded-full p-[12px_14px] bg-[#FFFFFF1A] font-semibold text-sm hover:ring-1 hover:ring-white transition-all duration-300">
-          {/* {selectedGenre?.name} */}
+          {selectedGenre?.name}
         </div>
-        {/* {filter.city && (
-					<div className="flex rounded-full p-[12px_14px] bg-[#FFFFFF1A] font-semibold text-sm hover:ring-1 hover:ring-white transition-all duration-300">
-						{filter.city}
-					</div>
-				)} */}
-        {/* {filter.theaters?.map((item) => (
-					<div
-						key={item}
-						className="flex rounded-full p-[12px_14px] bg-[#FFFFFF1A] font-semibold text-sm hover:ring-1 hover:ring-white transition-all duration-300"
-					>
-						{theaters.find((va) => va._id === item)?.name}
-					</div>
-				))} */}
+        {filter.city && (
+          <div className="flex rounded-full p-[12px_14px] bg-[#FFFFFF1A] font-semibold text-sm hover:ring-1 hover:ring-white transition-all duration-300">
+            {filter.city}
+          </div>
+        )}
+        {filter.theaters?.map((item) => (
+          <div
+            key={item}
+            className="flex rounded-full p-[12px_14px] bg-[#FFFFFF1A] font-semibold text-sm hover:ring-1 hover:ring-white transition-all duration-300">
+            {theaters?.find((va) => va._id === item)?.name}
+          </div>
+        ))}
+        {filter.availability && (
+          <div className="flex rounded-full p-[12px_14px] bg-[#FFFFFF1A] font-semibold text-sm hover:ring-1 hover:ring-white transition-all duration-300">
+            {filter.availability ? "Available Now" : "Coming Soon"}
+          </div>
+        )}
       </section>
       <section id="Popular" className="flex flex-col gap-4 mt-5">
-        <h2 className="font-semibold px-5">Popular Movies in Asian</h2>
+        <h2 className="font-semibold px-5">Filtered Movies</h2>
         <div className="swiper-popular w-full overflow-hidden">
+          {data?.data.filteredMovies.length === 0 && (
+            <p className="text-center">No movies found</p>
+          )}
           <Swiper
             spaceBetween={15}
             slidesPerView={"auto"}
@@ -142,7 +166,7 @@ export default function CustomerBrowseGenre() {
       </section>
       <div id="Bottom-Nav" className="relative w-full h-[123px] flex shrink-0">
         <button
-          className="fixed bottom-5 left-5 right-5 flex items-center shrink-0 rounded-3xl p-3 gap-3 h-12 bg-[#FFFFFF33] overflow-hidden transition-all duration-300 bg-black invert w-fit pr-4 mx-auto"
+          className="fixed bottom-5 left-5 right-5 flex items-center shrink-0 rounded-3xl p-3 gap-3 h-12 bg-[#FFFFFF33] overflow-hidden transition-all duration-300 bg-black invert w-fit pr-4 mx-auto z-10"
           type="button"
           onClick={() => {
             setShowFilter(true);

@@ -6,15 +6,19 @@ import { Toaster } from "react-hot-toast";
 import { RouterProvider } from "react-router";
 import "./index.css";
 import router from "./router/index.ts";
+import { Provider } from "react-redux";
+import store from "./redux/store.ts";
 
 export const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <Toaster />
-      <RouterProvider router={router} />
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-    </QueryClientProvider>
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <Toaster />
+        <RouterProvider router={router} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      </QueryClientProvider>
+    </Provider>
   </StrictMode>
 );
