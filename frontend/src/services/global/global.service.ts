@@ -1,5 +1,5 @@
 import type { BaseResponse } from "@/types/response";
-import type { MovieExplore } from "./global.type";
+import type { MovieExplore, SelectedSeat } from "./global.type";
 import { privateInstance } from "@/lib/axios";
 import type { FilterState } from "@/redux/features/filter/filterSlice";
 import z from "zod";
@@ -19,6 +19,18 @@ export const getMovieByGenre = async (
 ): Promise<BaseResponse<MovieExplore>> => {
   const res = await privateInstance.get(`/customer/browse-movies/${genreId}`, {
     params,
+  });
+  return res.data;
+};
+
+export const getSeats = async (
+  movieId: string,
+  date: string
+): Promise<BaseResponse<SelectedSeat[]>> => {
+  const res = await privateInstance.get(`/customer/check-seats/${movieId}`, {
+    params: {
+      date,
+    },
   });
   return res.data;
 };

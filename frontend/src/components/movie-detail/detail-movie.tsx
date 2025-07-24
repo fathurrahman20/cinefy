@@ -1,6 +1,9 @@
 import { useGetMovie } from "@/hooks/movie/useGetMovie";
 import { cn, formatIdr } from "@/lib/utils";
+import { setStep } from "@/redux/features/ticket/ticketSlice";
+import { useAppDispatch } from "@/redux/hooks";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { Link, useLoaderData } from "react-router";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
@@ -10,7 +13,25 @@ export default function DetailMovie() {
     "about"
   );
   const id = useLoaderData();
+  const dispatch = useAppDispatch();
+
   const { data: movie } = useGetMovie(id);
+
+  const handleContinue = () => {
+    if (!movie?.available) {
+      // If movie is coming soon
+      toast.error("Movie is coming soon", {
+        duration: 3000,
+        position: "top-center",
+      });
+      return;
+    }
+    dispatch(
+      setStep({
+        step: "THEATER",
+      })
+    );
+  };
   return (
     <div
       id="Content-Container"
@@ -20,7 +41,11 @@ export default function DetailMovie() {
         className="absolute top-0 w-full h-[480px] overflow-hidden">
         <div className="absolute w-full h-[169px] top-0 bg-[linear-gradient(180deg,rgba(0,0,0,0)_50.2%,rgba(14,14,36,0)_100%)]" />
         <div className="absolute w-full h-[169px] bottom-0 bg-[linear-gradient(360deg,#000000_6.6%,rgba(14,14,36,0)_99.33%)]" />
-        <img src={movie?.thumbnailUrl} alt="background" />
+        <img
+          src={movie?.thumbnailUrl}
+          alt="background"
+          className="w-full h-full object-cover"
+        />
       </div>
       <div
         id="Top-Nav"
@@ -34,10 +59,12 @@ export default function DetailMovie() {
             alt=""
           />
         </Link>
-        <p className="text-center mx-auto font-semibold text-sm">
+        {/* <p className="text-center mx-auto font-semibold text-sm">
           Movie Details
-        </p>
-        <div className="w-12 h-12 flex shrink-0 items-center justify-center bg-[#FFFFFF1A] backdrop-blur-md rounded-full">
+        </p> */}
+        <div
+          className="w-12 h-12 flex shrink-0 items-center justify-center
+         ">
           {/* <img
             src="/assets/images/icons/heart.svg"
             className="w-[22px] h-[22px] flex shrink-0"
@@ -149,14 +176,14 @@ export default function DetailMovie() {
                   />
                   <p className="text-sm">{movie?.theaters[0].city}</p>
                 </div>
-                <div className="flex items-center rounded-full p-[8px_14px] gap-1 bg-[#FFFFFF1A] backdrop-blur-md">
+                {/* <div className="flex items-center rounded-full p-[8px_14px] gap-1 bg-[#FFFFFF1A] backdrop-blur-md">
                   <p className="text-sm">4/5</p>
                   <img
                     src="/assets/images/icons/Star 1.svg"
                     className="w-[18px] h-[18px] flex shrink-0"
                     alt="icon"
                   />
-                </div>
+                </div> */}
               </div>
             </div>
           )}
@@ -287,35 +314,37 @@ export default function DetailMovie() {
       <section id="bonus" className="flex flex-col gap-4 mt-5">
         <h2 className="font-semibold px-5">Bonus Tickets</h2>
         <div className="swiper-bonus w-full overflow-hidden">
-          <Swiper
-            spaceBetween={15}
-            slidesPerView={"auto"}
-            slidesOffsetBefore={20}
-            slidesOffsetAfter={20}
-            className="swiper-wrapper">
-            <SwiperSlide className="swiper-slide !w-fit">
-              <div className="flex items-center w-[150px] rounded-[20px] px-[10px] py-[12px] gap-[14px] bg-white/10">
-                {/* <div className="w-20 h-20 rounded-2xl bg-[#D9D9D9] overflow-hidden">
+          {movie?.bonus && (
+            <Swiper
+              spaceBetween={15}
+              slidesPerView={"auto"}
+              slidesOffsetBefore={20}
+              slidesOffsetAfter={20}
+              className="swiper-wrapper">
+              <SwiperSlide className="swiper-slide !w-fit">
+                <div className="flex items-center w-[150px] rounded-[20px] px-[10px] py-[12px] gap-[14px] bg-white/10">
+                  {/* <div className="w-20 h-20 rounded-2xl bg-[#D9D9D9] overflow-hidden">
                   <img
                     src="/assets/images/thumbnails/popcorn.png"
                     className="w-full h-full object-cover"
                     alt="image2"
                   />
                 </div> */}
-                <div className="flex flex-col min-w-[120px] gap-[6px] mx-auto text-center">
-                  <h3 className="font-semibold">{movie?.bonus}</h3>
-                  <div className="flex items-center gap-2 mx-auto">
-                    <img
-                      src="/assets/images/icons/coffee.svg"
-                      className="w-[18px] h-[18px] flex shrink-0"
-                      alt="icon"
-                    />
-                    <p className="text-sm text-premiere-grey">Snacks</p>
+                  <div className="flex flex-col min-w-[120px] gap-[6px] mx-auto text-center">
+                    <h3 className="font-semibold">{movie?.bonus}</h3>
+                    <div className="flex items-center gap-2 mx-auto">
+                      <img
+                        src="/assets/images/icons/coffee.svg"
+                        className="w-[18px] h-[18px] flex shrink-0"
+                        alt="icon"
+                      />
+                      <p className="text-sm text-premiere-grey">Snacks</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </SwiperSlide>
-          </Swiper>
+              </SwiperSlide>
+            </Swiper>
+          )}
         </div>
       </section>
       <div id="Bottom-Nav" className="relative w-full h-[123px] flex shrink-0">
@@ -328,6 +357,8 @@ export default function DetailMovie() {
           </div>
           <button
             type="button"
+            // disabled={!movie?.available}
+            onClick={handleContinue}
             className="rounded-full p-[12px_18px] bg-white font-bold text-black">
             Buy Ticket
           </button>

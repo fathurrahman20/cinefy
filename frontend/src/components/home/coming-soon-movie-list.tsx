@@ -1,4 +1,5 @@
 import { useGetMovies } from "@/hooks/movie/useGetMovies";
+import { Link } from "react-router";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function ComingSoonMovieList() {
@@ -15,7 +16,7 @@ export default function ComingSoonMovieList() {
           className="swiper-wrapper">
           {movies?.map((item) => (
             <SwiperSlide key={item._id} className="swiper-slide !w-fit">
-              <a href="details.html" className="card">
+              <Link to="/" className="card">
                 <div className="relative flex w-[240px] h-[300px] shrink-0 rounded-3xl bg-[#D9D9D9] overflow-hidden">
                   <img
                     src={item.thumbnailUrl}
@@ -36,7 +37,7 @@ export default function ComingSoonMovieList() {
                     </div>
                   </div>
                 </div>
-              </a>
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>

@@ -102,9 +102,9 @@ export const getMovieDetail: RequestHandler = async (
       data: {
         movie: {
           ...movie?.toJSON(),
+          seats,
+          times: ["10:00", "12:00", "14:00", "16:00", "19:00"],
         },
-        seats,
-        times: ["10:00", "12:00", "14:00", "16:00", "19:00"],
       },
     });
   } catch (error: any) {
