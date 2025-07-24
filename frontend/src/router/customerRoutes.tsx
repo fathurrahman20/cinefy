@@ -2,6 +2,7 @@ import { getSession } from "@/lib/utils";
 import CustomerBrowseGenre from "@/pages/CustomerBrowse";
 import CustomerHome from "@/pages/CustomerHome";
 import CustomerLogin from "@/pages/CustomerLogin";
+import CustomerMovieDetail from "@/pages/CustomerMovieDetail";
 import CustomerRegister from "@/pages/CustomerRegister";
 import { redirect, type RouteObject } from "react-router";
 
@@ -32,6 +33,23 @@ const customerRoutes: RouteObject[] = [
       }
     },
     element: <CustomerBrowseGenre />,
+  },
+  {
+    path: "/movie/:movieId",
+    loader: async ({ params }) => {
+      const user = getSession();
+
+      if (!user || user.role !== "customer") {
+        throw redirect("/login");
+      }
+
+      if (!params.movieId) {
+        throw redirect("/");
+      }
+
+      return params.movieId;
+    },
+    element: <CustomerMovieDetail />,
   },
 ];
 

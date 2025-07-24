@@ -27,7 +27,7 @@ export function clearSession() {
   return session;
 }
 
-export function formatIdr(idr: number) {
+export function formatIdr(idr: number | undefined) {
   const parsed = idr?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
   return `${"Rp "}${parsed}`;
