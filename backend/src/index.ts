@@ -10,6 +10,7 @@ import cors from "cors";
 import { getGenre, getGenres } from "./controllers/genreController";
 import { getMovie, getMovies } from "./controllers/movieController";
 import { getTheater, getTheaters } from "./controllers/theaterController";
+import { handleTopupBalance } from "./controllers/walletController";
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.get("/api/movies", getMovies);
 app.get("/api/movies/:id", getMovie);
 app.get("/api/theaters", getTheaters);
 app.get("/api/theaters/:id", getTheater);
+app.post("/api/global/handle-payment", handleTopupBalance);
 app.use("/api/admin", adminRoutes);
 app.use("/api/customer", customerRoutes);
 

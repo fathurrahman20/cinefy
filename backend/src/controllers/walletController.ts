@@ -1,4 +1,4 @@
-import { RequestHandler, Response } from "express";
+import { Request, RequestHandler, Response } from "express";
 import { CustomRequest } from "../types/Request";
 import Wallet from "../models/Wallet";
 import WalletTransaction from "../models/WalletTransaction";
@@ -114,5 +114,72 @@ export const topupBalance: RequestHandler = async (
       message: "Failed to topup balance",
       data: null,
     });
+  }
+};
+
+interface TopupRequestBody {
+  order_id: string;
+  transaction_status: string;
+  // Add other properties if they exist in the body
+}
+
+export const handleTopupBalance: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    if (
+      !req.body ||
+      typeof req.body.order_id === "undefined" ||
+      typeof req.body.transaction_status === "undefined"
+    ) {
+      res.status(400).json({ status: false, message: "Invalid request body" });
+      return;
+    }
+
+    const body = req.body as TopupRequestBody;
+
+    const orderId = body.order_id;
+
+    switch (body.transaction_status) {
+      case "capture":
+      case "settlement": {
+        const walletTransaction = await WalletTransaction.findById(orderId);
+        const wallet = await Wallet.findById(walletTransaction?.wallet);
+
+        await WalletTransaction.findByIdAndUpdate(orderId, {
+          status: "success",
+        });
+
+        const currentBalance = wallet?.balance ?? 0;
+        const additionalBalance = walletTransaction?.price ?? 0;
+
+        await Wallet.findByIdAndUpdate(wallet?.id, {
+          balance: currentBalance + additionalBalance,
+        });
+
+        break;
+      }
+
+      case "deny":
+      case "cancel":
+      case "expire":
+      case "failure": {
+        await WalletTransaction.findByIdAndUpdate(orderId, {
+          status: "failed",
+        });
+
+        break;
+      }
+
+      default:
+        break;
+    }
+
+    res.json({ status: true });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ status: false, message: "An internal server error occurred." });
   }
 };
