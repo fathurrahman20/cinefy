@@ -33,8 +33,11 @@ export function formatIdr(idr: number | undefined) {
   return `${"Rp "}${parsed}`;
 }
 
-export function formatDate(date: Date | string) {
-  return dayjs(date).format("DD MMMM YYYY");
+export function formatDate(
+  date: Date | string,
+  format: string = "DD MMMM YYYY"
+) {
+  return dayjs(date).format(format);
 }
 
 export function generateUserPhoto(name: string | undefined = "User") {

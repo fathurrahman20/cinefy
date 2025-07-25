@@ -1,5 +1,5 @@
 import type { BaseResponse } from "@/types/response";
-import type { MovieExplore, SelectedSeat } from "./global.type";
+import type { Balance, MovieExplore, SelectedSeat } from "./global.type";
 import { privateInstance } from "@/lib/axios";
 import type { FilterState } from "@/redux/features/filter/filterSlice";
 import z from "zod";
@@ -11,7 +11,19 @@ export const filterSchema = z.object({
   theaters: z.array(z.string()).nullable(),
 });
 
+export const transactionSchema = z.object({
+  subtotal: z.number(),
+  total: z.number(),
+  bookingFee: z.number(),
+  tax: z.number(),
+  movieId: z.string(),
+  theaterId: z.string(),
+  seats: z.array(z.string()),
+  date: z.string(),
+});
+
 export type FilterValues = z.infer<typeof filterSchema>;
+export type TransactionValues = z.infer<typeof transactionSchema>;
 
 export const getMovieByGenre = async (
   genreId: string,
@@ -32,5 +44,15 @@ export const getSeats = async (
       date,
     },
   });
+  return res.data;
+};
+
+export const getBalance = async (): Promise<BaseResponse<Balance>> => {
+  const res = await privateInstance.get("/customer/check-balance");
+  return res.data;
+};
+
+export const buyTicket = async (data: TransactionValues) => {
+  const res = await privateInstance.post("/customer/transaction/buy", data);
   return res.data;
 };

@@ -4,6 +4,7 @@ import CustomerHome from "@/pages/CustomerHome";
 import CustomerLogin from "@/pages/CustomerLogin";
 import CustomerMovieDetail from "@/pages/CustomerMovieDetail";
 import CustomerRegister from "@/pages/CustomerRegister";
+import CustomerTransaction from "@/pages/CustomerTransaction";
 import { redirect, type RouteObject } from "react-router";
 
 const customerRoutes: RouteObject[] = [
@@ -50,6 +51,19 @@ const customerRoutes: RouteObject[] = [
       return params.movieId;
     },
     element: <CustomerMovieDetail />,
+  },
+  {
+    path: "/transaction-ticket",
+    loader: async () => {
+      const user = getSession();
+
+      if (!user || user.role !== "customer") {
+        throw redirect("/login");
+      }
+
+      return true;
+    },
+    element: <CustomerTransaction />,
   },
 ];
 
