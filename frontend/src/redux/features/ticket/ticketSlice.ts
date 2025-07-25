@@ -9,7 +9,7 @@ type Ticket = {
 };
 
 export interface TicketState {
-  step?: "DETAIL" | "THEATER" | "TIME" | "SEAT";
+  step?: "DETAIL" | "THEATER" | "TIME" | "SEAT" | "SUCCESS";
   detail?: Ticket | null;
   movie?: MovieDetail | null;
 }

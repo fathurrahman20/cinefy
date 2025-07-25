@@ -20,7 +20,7 @@ export const useBuyTicket = () => {
 
       dispatch(
         setStep({
-          step: "DETAIL",
+          step: "SUCCESS",
         })
       );
 

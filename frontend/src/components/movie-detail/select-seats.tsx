@@ -3,6 +3,7 @@ import { useGetMovieDetail } from "@/hooks/movie/useGetMovie";
 import { cn, formatIdr } from "@/lib/utils";
 import {
   setMovieDetail,
+  setStep,
   setTicketDetail,
 } from "@/redux/features/ticket/ticketSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -71,6 +72,14 @@ export default function SelectSeats() {
 
     navigate("/transaction-ticket");
   };
+
+  const handleBack = () => {
+    dispatch(
+      setStep({
+        step: "DETAIL",
+      })
+    );
+  };
   return (
     <div
       id="Content-Container"
@@ -96,15 +105,15 @@ export default function SelectSeats() {
         <div
           id="Top-Nav"
           className="relative flex items-center justify-between px-5 mt-[60px]">
-          <a
-            href="choose-time.html"
+          <button
+            onClick={handleBack}
             className="w-12 h-12 flex shrink-0 items-center justify-center bg-[#FFFFFF1A] backdrop-blur-md rounded-full">
             <img
               src="/assets/images/icons/arrow-left.svg"
               className="w-[22px] h-[22px] flex shrink-0"
               alt=""
             />
-          </a>
+          </button>
           <p className="text-center mx-auto font-semibold text-sm">
             Choose Your Seats
           </p>

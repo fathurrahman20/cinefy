@@ -9,7 +9,7 @@ export default function CustomerMovieDetail() {
 
   return (
     <>
-      {step === "DETAIL" && <DetailMovie />}
+      {(step === "DETAIL" || step === "SUCCESS") && <DetailMovie />}
       {step === "THEATER" && <SelectTheater />}
       {step === "TIME" && <SelectTime />}
       {step === "SEAT" && <SelectSeats />}
