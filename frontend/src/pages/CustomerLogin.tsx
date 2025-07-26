@@ -34,7 +34,7 @@ export default function CustomerLogin() {
         <div className="absolute w-full h-full top-0 bg-[linear-gradient(359.16deg,_#000000_6.6%,_rgba(14,14,36,0)_99.33%)]" />
         <img
           src="assets/images/backgrounds/signin.png"
-          className="w-full h-full object-cover"
+          className="object-cover w-full h-full"
           alt="background"
         />
       </div>
@@ -77,7 +77,7 @@ export default function CustomerLogin() {
             Sign In to My Account
           </button>
           <Link
-            to="/sign-up"
+            to="/register"
             className="w-full rounded-full py-3 px-[18px] bg-white/10 text-center font-bold">
             Create New Account
           </Link>
