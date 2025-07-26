@@ -9,11 +9,9 @@ export const getWalletTopupHistory = async (): Promise<
   return res.data;
 };
 
-export const topupWallet = async (
-  price: number
-): Promise<BaseResponse<WalletTopup>> => {
-  const res = await privateInstance.post("/global/handle-payment", {
-    balance: price,
-  });
+export const topupWallet = async (data: {
+  balance: number;
+}): Promise<BaseResponse<WalletTopup>> => {
+  const res = await privateInstance.post("/customer/top-up", data);
   return res.data;
 };

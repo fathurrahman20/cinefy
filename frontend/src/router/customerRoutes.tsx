@@ -7,6 +7,8 @@ import CustomerRegister from "@/pages/CustomerRegister";
 import CustomerTransaction from "@/pages/CustomerTransaction";
 import CustomerTransactionSuccess from "@/pages/CustomerTransactionSuccess";
 import CustomerWallet from "@/pages/CustomerWallet";
+import CustomerWalletTopup from "@/pages/CustomerWalletTopup";
+import CustomerWalletTopupSuccess from "@/pages/CustomerWalletTopupSuccess";
 import { redirect, type RouteObject } from "react-router";
 
 const customerRoutes: RouteObject[] = [
@@ -92,6 +94,32 @@ const customerRoutes: RouteObject[] = [
       return true;
     },
     element: <CustomerWallet />,
+  },
+  {
+    path: "/wallets/topup",
+    loader: async () => {
+      const user = getSession();
+
+      if (!user || user.role !== "customer") {
+        throw redirect("/login");
+      }
+
+      return true;
+    },
+    element: <CustomerWalletTopup />,
+  },
+  {
+    path: "/wallets/topup/success",
+    loader: async () => {
+      const user = getSession();
+
+      if (!user || user.role !== "customer") {
+        throw redirect("/login");
+      }
+
+      return true;
+    },
+    element: <CustomerWalletTopupSuccess />,
   },
 ];
 

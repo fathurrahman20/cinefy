@@ -25,6 +25,7 @@ app.use(cors());
 
 connectDB();
 
+app.post("/api/global/handle-payment", handleTopupBalance);
 app.use("/api", authRoutes);
 app.get("/api/genres", getGenres);
 app.get("/api/genres/:id", getGenre);
@@ -32,7 +33,6 @@ app.get("/api/movies", getMovies);
 app.get("/api/movies/:id", getMovie);
 app.get("/api/theaters", getTheaters);
 app.get("/api/theaters/:id", getTheater);
-app.post("/api/global/handle-payment", handleTopupBalance);
 app.use("/api/admin", adminRoutes);
 app.use("/api/customer", customerRoutes);
 

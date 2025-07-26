@@ -28,7 +28,7 @@ export default function CustomerWallet() {
         <div className="relative flex flex-col w-full max-w-[353px] rounded-[30px] bg-white/10 overflow-hidden">
           <img
             src="/assets/images/backgrounds/wallet-lines.svg"
-            className="absolute w-full h-full object-cover"
+            className="absolute object-cover w-full h-full"
             alt=""
           />
           <img
@@ -44,20 +44,20 @@ export default function CustomerWallet() {
           <div className="flex items-center justify-between p-[10px_14px] pl-6 bg-white/20 backdrop-blur-3xl mt-[21px]">
             <div className="flex flex-col gap-[2px]">
               <p className="text-xs leading-[18px]">Name</p>
-              <p className="font-semibold text-sm">{user?.name}</p>
+              <p className="text-sm font-semibold">{user?.name}</p>
             </div>
             <div className="flex flex-col gap-[2px]">
               <p className="text-xs leading-[18px]">Expired At</p>
-              <p className="font-semibold text-sm">02/30</p>
+              <p className="text-sm font-semibold">02/30</p>
             </div>
             <div className="flex flex-col gap-[2px]">
               <p className="text-xs leading-[18px]">Branch</p>
-              <p className="font-semibold text-sm">HQ</p>
+              <p className="text-sm font-semibold">HQ</p>
             </div>
           </div>
         </div>
       </section>
-      <section className="flex flex-col gap-4 mt-5 px-5">
+      <section className="flex flex-col gap-4 px-5 mt-5">
         <h2 className="font-semibold">Latest Transactions</h2>
         {transactions?.map((item) => (
           <div
@@ -87,7 +87,7 @@ export default function CustomerWallet() {
             </div>
             <p
               className={cn(
-                "w-fit rounded-full p-[4px_6px]  font-semibold text-[10px] leading-[15px]",
+                "w-fit rounded-full p-[4px_6px]  font-semibold text-[10px] leading-[15px] capitalize",
                 item.status === "failed"
                   ? "bg-premiere-light-red text-premiere-red"
                   : "",
