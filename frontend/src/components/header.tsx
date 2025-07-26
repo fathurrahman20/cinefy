@@ -1,5 +1,3 @@
-import React from "react";
-
 import {
   CircleUser,
   Home,
@@ -24,9 +22,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { SESSION_KEY } from "@/lib/utils";
 import { Link } from "react-router";
 import secureLocalStorage from "react-secure-storage";
-import { SESSION_KEY } from "@/lib/utils";
 
 export default function Header() {
   const logout = () => {
