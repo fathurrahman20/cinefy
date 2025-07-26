@@ -21,6 +21,8 @@ export default function SelectSeats() {
 
   const { data, isLoading } = useGetSeats(id, detailTicket?.time ?? "");
 
+  console.log(`Data Seats`, JSON.stringify(data));
+
   const navigate = useNavigate();
 
   const isBooked = useCallback(
@@ -85,7 +87,7 @@ export default function SelectSeats() {
       id="Content-Container"
       className="relative flex flex-col w-full max-w-[640px] min-h-screen mx-auto bg-[linear-gradient(179.86deg,_#000000_40.82%,_#0E0E24_99.88%)] overflow-x-hidden text-white">
       <div id="Header" className="relative flex flex-col h-[257px] gap-5">
-        <div id="screen-container" className="absolute bottom-0 w-full z-0">
+        <div id="screen-container" className="absolute bottom-0 z-0 w-full">
           <img
             src="/assets/images/backgrounds/screen-light.svg"
             className="absolute transform -translate-x-1/2 -translate-y-1/2 top-[70%] left-1/2"
@@ -94,11 +96,11 @@ export default function SelectSeats() {
           <div id="Screen" className="relative flex h-[197px] overflow-hidden">
             <img
               src="/assets/images/thumbnails/th3.png"
-              className="w-full h-full object-cover"
+              className="object-cover w-full h-full"
               alt="image2"
             />
           </div>
-          <p className="font-semibold text-sm w-fit transform -translate-x-1/2 -translate-y-1/2 absolute bottom-8 left-1/2">
+          <p className="absolute text-sm font-semibold transform -translate-x-1/2 -translate-y-1/2 w-fit bottom-8 left-1/2">
             SCREEN
           </p>
         </div>
@@ -114,10 +116,10 @@ export default function SelectSeats() {
               alt=""
             />
           </button>
-          <p className="text-center mx-auto font-semibold text-sm">
+          <p className="mx-auto text-sm font-semibold text-center">
             Choose Your Seats
           </p>
-          <div className="dummy-button w-12" />
+          <div className="w-12 dummy-button" />
         </div>
       </div>
       <form action="tickets-payment.html" className="relative px-5 mt-5">
@@ -128,13 +130,17 @@ export default function SelectSeats() {
             {detail?.movie.seats.map((item, i) => (
               <button
                 type="button"
-                onClick={() => handleSelectSeat(item.seat)}
+                onClick={() => {
+                  if (!isBooked(item.seat)) {
+                    handleSelectSeat(item.seat);
+                  }
+                }}
                 key={`${item.seat + i}`}
                 className="group relative flex w-10 h-[38px] shrink-0 has-[:disabled]:brightness-50">
                 <input
                   type="checkbox"
                   name="seat"
-                  className="seat-checkbox absolute top-1/2 left-1/2 opacity-0"
+                  className="absolute opacity-0 seat-checkbox top-1/2 left-1/2"
                   disabled={isBooked(item.seat)}
                 />
                 <img
