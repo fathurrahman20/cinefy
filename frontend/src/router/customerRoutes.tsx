@@ -6,6 +6,7 @@ import CustomerMovieDetail from "@/pages/CustomerMovieDetail";
 import CustomerRegister from "@/pages/CustomerRegister";
 import CustomerTransaction from "@/pages/CustomerTransaction";
 import CustomerTransactionSuccess from "@/pages/CustomerTransactionSuccess";
+import CustomerWallet from "@/pages/CustomerWallet";
 import { redirect, type RouteObject } from "react-router";
 
 const customerRoutes: RouteObject[] = [
@@ -78,6 +79,19 @@ const customerRoutes: RouteObject[] = [
       return true;
     },
     element: <CustomerTransactionSuccess />,
+  },
+  {
+    path: "/wallets",
+    loader: async () => {
+      const user = getSession();
+
+      if (!user || user.role !== "customer") {
+        throw redirect("/login");
+      }
+
+      return true;
+    },
+    element: <CustomerWallet />,
   },
 ];
 
