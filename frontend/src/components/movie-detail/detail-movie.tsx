@@ -1,14 +1,17 @@
 import { useGetMovie } from "@/hooks/movie/useGetMovie";
-import { cn, formatIdr } from "@/lib/utils";
+import { cn, formatIdr, getSession } from "@/lib/utils";
 import { setStep } from "@/redux/features/ticket/ticketSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { Link, useLoaderData } from "react-router";
+import { Link, useLoaderData, useNavigate } from "react-router";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 
 export default function DetailMovie() {
+  const user = getSession();
+  const navigate = useNavigate();
+
   const [tab, setTab] = useState<"about" | "reviews" | "theaters" | "cast">(
     "about"
   );
@@ -26,6 +29,19 @@ export default function DetailMovie() {
       });
       return;
     }
+
+    if (!user || user.role !== "customer") {
+      toast.error("Please login first", {
+        duration: 3000,
+        position: "top-center",
+      });
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
+
+      return;
+    }
+
     dispatch(
       setStep({
         step: "THEATER",
@@ -44,7 +60,7 @@ export default function DetailMovie() {
         <img
           src={movie?.thumbnailUrl}
           alt="background"
-          className="w-full h-full object-cover"
+          className="object-cover w-full h-full"
         />
       </div>
       <div
@@ -59,12 +75,10 @@ export default function DetailMovie() {
             alt=""
           />
         </Link>
-        {/* <p className="text-center mx-auto font-semibold text-sm">
+        {/* <p className="mx-auto text-sm font-semibold text-center">
           Movie Details
         </p> */}
-        <div
-          className="w-12 h-12 flex shrink-0 items-center justify-center
-         ">
+        <div className="flex items-center justify-center w-12 h-12 shrink-0 ">
           {/* <img
             src="/assets/images/icons/heart.svg"
             className="w-[22px] h-[22px] flex shrink-0"
@@ -81,13 +95,13 @@ export default function DetailMovie() {
           className="w-[60px] h-[60px] flex shrink-0 items-center justify-center bg-[#FFFFFF1A] backdrop-blur-md rounded-full">
           <img
             src="/assets/images/icons/video-circle.svg"
-            className="w-9 h-9 flex shrink-0"
+            className="flex w-9 h-9 shrink-0"
             alt="icon"
           />
         </button>
       </div>
       <section id="Details" className="flex flex-col gap-5 mt-5">
-        <div className="swiper-tabs w-full overflow-hidden">
+        <div className="w-full overflow-hidden swiper-tabs">
           <Swiper
             spaceBetween={15}
             slidesPerView={"auto"}
@@ -154,7 +168,7 @@ export default function DetailMovie() {
         </div>
         <div className="px-5">
           {tab === "about" && (
-            <div id="About-Tab" className="tab-content flex flex-col gap-5">
+            <div id="About-Tab" className="flex flex-col gap-5 tab-content">
               <div className="flex flex-col gap-3">
                 <h2 className="font-semibold">About</h2>
                 <p className="leading-[28px]">{movie?.description}</p>
@@ -188,28 +202,28 @@ export default function DetailMovie() {
             </div>
           )}
           {tab === "reviews" && (
-            <div id="Reviews-Tab" className="tab-content flex flex-col gap-4">
+            <div id="Reviews-Tab" className="flex flex-col gap-4 tab-content">
               <h2 className="font-semibold">Customer Reviews</h2>
-              <div className="review-card flex flex-col rounded-3xl p-4 gap-2 bg-white/10 backdrop-blur-md">
+              <div className="flex flex-col gap-2 p-4 review-card rounded-3xl bg-white/10 backdrop-blur-md">
                 <div className="flex items-center gap-1">
                   <img
                     src="/assets/images/icons/Star 1.svg"
-                    className="w-5 h-5 flex shrink-0"
+                    className="flex w-5 h-5 shrink-0"
                     alt="star"
                   />
                   <img
                     src="/assets/images/icons/Star 1.svg"
-                    className="w-5 h-5 flex shrink-0"
+                    className="flex w-5 h-5 shrink-0"
                     alt="star"
                   />
                   <img
                     src="/assets/images/icons/Star 1.svg"
-                    className="w-5 h-5 flex shrink-0"
+                    className="flex w-5 h-5 shrink-0"
                     alt="star"
                   />
                   <img
                     src="/assets/images/icons/Star 1.svg"
-                    className="w-5 h-5 flex shrink-0"
+                    className="flex w-5 h-5 shrink-0"
                     alt="star"
                   />
                 </div>
@@ -218,31 +232,31 @@ export default function DetailMovie() {
                 </p>
                 <p className="font-semibold">Pipo Bungari</p>
               </div>
-              <div className="review-card flex flex-col rounded-3xl p-4 gap-2 bg-white/10 backdrop-blur-md">
+              <div className="flex flex-col gap-2 p-4 review-card rounded-3xl bg-white/10 backdrop-blur-md">
                 <div className="flex items-center gap-1">
                   <img
                     src="/assets/images/icons/Star 1.svg"
-                    className="w-5 h-5 flex shrink-0"
+                    className="flex w-5 h-5 shrink-0"
                     alt="star"
                   />
                   <img
                     src="/assets/images/icons/Star 1.svg"
-                    className="w-5 h-5 flex shrink-0"
+                    className="flex w-5 h-5 shrink-0"
                     alt="star"
                   />
                   <img
                     src="/assets/images/icons/Star 1.svg"
-                    className="w-5 h-5 flex shrink-0"
+                    className="flex w-5 h-5 shrink-0"
                     alt="star"
                   />
                   <img
                     src="/assets/images/icons/Star 1.svg"
-                    className="w-5 h-5 flex shrink-0"
+                    className="flex w-5 h-5 shrink-0"
                     alt="star"
                   />
                   <img
                     src="/assets/images/icons/Star 1.svg"
-                    className="w-5 h-5 flex shrink-0"
+                    className="flex w-5 h-5 shrink-0"
                     alt="star"
                   />
                 </div>
@@ -252,31 +266,31 @@ export default function DetailMovie() {
                 </p>
                 <p className="font-semibold">Ibnu Fathoni</p>
               </div>
-              <div className="review-card flex flex-col rounded-3xl p-4 gap-2 bg-white/10 backdrop-blur-md">
+              <div className="flex flex-col gap-2 p-4 review-card rounded-3xl bg-white/10 backdrop-blur-md">
                 <div className="flex items-center gap-1">
                   <img
                     src="/assets/images/icons/Star 1.svg"
-                    className="w-5 h-5 flex shrink-0"
+                    className="flex w-5 h-5 shrink-0"
                     alt="star"
                   />
                   <img
                     src="/assets/images/icons/Star 1.svg"
-                    className="w-5 h-5 flex shrink-0"
+                    className="flex w-5 h-5 shrink-0"
                     alt="star"
                   />
                   <img
                     src="/assets/images/icons/Star 1.svg"
-                    className="w-5 h-5 flex shrink-0"
+                    className="flex w-5 h-5 shrink-0"
                     alt="star"
                   />
                   <img
                     src="/assets/images/icons/Star 1.svg"
-                    className="w-5 h-5 flex shrink-0"
+                    className="flex w-5 h-5 shrink-0"
                     alt="star"
                   />
                   <img
                     src="/assets/images/icons/Star 1.svg"
-                    className="w-5 h-5 flex shrink-0"
+                    className="flex w-5 h-5 shrink-0"
                     alt="star"
                   />
                 </div>
@@ -288,16 +302,16 @@ export default function DetailMovie() {
             </div>
           )}
           {tab === "theaters" && (
-            <div id="Theaters-Tab" className="tab-content flex flex-col gap-4">
+            <div id="Theaters-Tab" className="flex flex-col gap-4 tab-content">
               <h2 className="font-semibold">Available in Theaters</h2>
               {movie?.theaters?.map((item) => (
                 <div
                   key={item._id}
-                  className="theather-card flex items-center rounded-3xl p-4 gap-2 bg-white/10 backdrop-blur-md">
+                  className="flex items-center gap-2 p-4 theather-card rounded-3xl bg-white/10 backdrop-blur-md">
                   {/* <div className="w-[100px] h-[110px] flex shrink-0 rounded-2xl overflow-hidden bg-[#D9D9D9]">
                     <img
                       src="/assets/images/thumbnails/theater1.png"
-                      className="w-full h-full object-cover"
+                      className="object-cover w-full h-full"
                       alt="theater"
                     />
                   </div> */}
@@ -312,8 +326,8 @@ export default function DetailMovie() {
         </div>
       </section>
       <section id="bonus" className="flex flex-col gap-4 mt-5">
-        <h2 className="font-semibold px-5">Bonus Tickets</h2>
-        <div className="swiper-bonus w-full overflow-hidden">
+        <h2 className="px-5 font-semibold">Bonus Tickets</h2>
+        <div className="w-full overflow-hidden swiper-bonus">
           {movie?.bonus && (
             <Swiper
               spaceBetween={15}
@@ -326,7 +340,7 @@ export default function DetailMovie() {
                   {/* <div className="w-20 h-20 rounded-2xl bg-[#D9D9D9] overflow-hidden">
                   <img
                     src="/assets/images/thumbnails/popcorn.png"
-                    className="w-full h-full object-cover"
+                    className="object-cover w-full h-full"
                     alt="image2"
                   />
                 </div> */}

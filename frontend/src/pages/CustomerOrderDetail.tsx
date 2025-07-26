@@ -1,3 +1,4 @@
+import MenuBar from "@/components/menu-bar";
 import { useGetOrderDetail } from "@/hooks/customer/useGetOrderDetail";
 import { formatDate, formatIdr } from "@/lib/utils";
 import { Link, useLoaderData } from "react-router";
@@ -5,10 +6,7 @@ import { Link, useLoaderData } from "react-router";
 export default function CustomerOrderDetail() {
   const id = useLoaderData();
 
-  console.log(`ID: ${id}`);
-
   const { data: transaction } = useGetOrderDetail(id);
-  console.log(`Data Transaction : ${JSON.stringify(transaction)}`);
   return (
     <div
       id="Content-Container"
@@ -243,17 +241,17 @@ export default function CustomerOrderDetail() {
         <div className="w-full pl-6 overflow-hidden swiper-bonus">
           <div className="swiper-wrapper">
             <div className="swiper-slide !w-fit">
-              <div className="flex items-center w-[230px] rounded-[20px] p-[10px] gap-[14px] bg-white/10">
-                <div className="w-20 h-20 rounded-2xl bg-[#D9D9D9] overflow-hidden">
+              <div className="flex items-center w-[150px] rounded-[20px] px-[10px] py-[12px] gap-[14px] bg-white/10">
+                {/* <div className="w-20 h-20 rounded-2xl bg-[#D9D9D9] overflow-hidden">
                   <img
                     src="/assets/images/thumbnails/popcorn.png"
                     className="object-cover w-full h-full"
                     alt="image2"
                   />
-                </div>
-                <div className="flex flex-col min-w-[120px] gap-[6px]">
+                </div> */}
+                <div className="flex flex-col min-w-[120px] gap-[6px] mx-auto text-center">
                   <h3 className="font-semibold">{transaction?.movie.bonus}</h3>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 mx-auto">
                     <img
                       src="/assets/images/icons/coffee.svg"
                       className="w-[18px] h-[18px] flex shrink-0"
@@ -268,11 +266,14 @@ export default function CustomerOrderDetail() {
         </div>
       </section>
       <div className="relative h-[98px] w-full max-w-[640px] px-5">
-        <button
+        {/* <button
           type="button"
           className="fixed bottom-[30px] w-[calc(100%-40px)] max-w-[600px] rounded-full p-[12px_18px] h-fit bg-white font-bold text-premiere-black z-10 text-center">
           Give Rating
-        </button>
+        </button> */}
+        <div className="fixed bottom-[40px]  z-10 text-center">
+          <MenuBar activeLink="tickets" />
+        </div>
       </div>
     </div>
   );

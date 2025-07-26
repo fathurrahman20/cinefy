@@ -140,9 +140,6 @@ export default function SelectTime() {
               <button
                 type="button"
                 onClick={() => {
-                  console.log(
-                    `${dayjs().add(1, "day").format("YYYY-MM-DD")} ${item}`
-                  );
                   setDate(
                     `${dayjs().add(1, "day").format("YYYY-MM-DD")} ${item}`
                   );

@@ -5,7 +5,6 @@ import { Link } from "react-router";
 
 export default function CustomerOrders() {
   const { data: transactions } = useGetOrders();
-  console.log(`Transactions: ${JSON.stringify(transactions)}`);
   return (
     <div
       id="Content-Container"

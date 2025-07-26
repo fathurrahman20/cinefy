@@ -146,7 +146,6 @@ export const createMovie: RequestHandler = async (
       data: newMovie,
     });
   } catch (error) {
-    console.log(`Errornya: ${error}`);
     res.status(500).json({
       status: "error",
       message: "Failed to create movie",

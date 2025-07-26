@@ -6,6 +6,7 @@ import CustomerMovieDetail from "@/pages/CustomerMovieDetail";
 import CustomerOrderDetail from "@/pages/CustomerOrderDetail";
 import CustomerOrders from "@/pages/CustomerOrders";
 import CustomerRegister from "@/pages/CustomerRegister";
+import CustomerSettings from "@/pages/CustomerSettings";
 import CustomerTransaction from "@/pages/CustomerTransaction";
 import CustomerTransactionSuccess from "@/pages/CustomerTransactionSuccess";
 import CustomerWallet from "@/pages/CustomerWallet";
@@ -44,12 +45,6 @@ const customerRoutes: RouteObject[] = [
   {
     path: "/movie/:movieId",
     loader: async ({ params }) => {
-      const user = getSession();
-
-      if (!user || user.role !== "customer") {
-        throw redirect("/login");
-      }
-
       if (!params.movieId) {
         throw redirect("/");
       }
@@ -152,6 +147,19 @@ const customerRoutes: RouteObject[] = [
       return params.orderId;
     },
     element: <CustomerOrderDetail />,
+  },
+  {
+    path: "/settings",
+    loader: async () => {
+      const user = getSession();
+
+      if (!user || user.role !== "customer") {
+        throw redirect("/login");
+      }
+
+      return true;
+    },
+    element: <CustomerSettings />,
   },
 ];
 

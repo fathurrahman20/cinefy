@@ -76,7 +76,6 @@ export const register: RequestHandler = async (req: Request, res: Response) => {
       const errorMessage = parse.error.issues.map(
         (issue) => `${issue.path}: ${issue.message}`
       );
-      console.log(`Error: ${parse.error}`);
       res.status(400).json({
         status: "error",
         message: "Invalid request",
@@ -119,7 +118,6 @@ export const register: RequestHandler = async (req: Request, res: Response) => {
       data: null,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       status: "error",
       message: "Failed to register",

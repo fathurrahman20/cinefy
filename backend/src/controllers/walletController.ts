@@ -128,15 +128,11 @@ export const handleTopupBalance: RequestHandler = async (
   res: Response
 ) => {
   try {
-    console.log("--- Notifikasi Midtrans Diterima ---");
-    console.log("Request Body:", req.body); // Log seluruh body
-
     if (
       !req.body ||
       typeof req.body.order_id === "undefined" ||
       typeof req.body.transaction_status === "undefined"
     ) {
-      console.error("Invalid request body:", req.body);
       res.status(400).json({ status: false, message: "Invalid request body" });
       return;
     }
@@ -144,10 +140,6 @@ export const handleTopupBalance: RequestHandler = async (
     const body = req.body as TopupRequestBody;
 
     const orderId = body.order_id;
-
-    console.log(
-      `Processing Order ID: ${orderId}, Status: ${body.transaction_status}`
-    );
 
     switch (body.transaction_status) {
       case "capture":
@@ -186,7 +178,6 @@ export const handleTopupBalance: RequestHandler = async (
 
     res.json({ status: true });
   } catch (error) {
-    console.error("Error processing Midtrans notification:", error);
     res
       .status(500)
       .json({ status: false, message: "An internal server error occurred." });
