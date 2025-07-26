@@ -3,6 +3,7 @@ import CustomerBrowseGenre from "@/pages/CustomerBrowse";
 import CustomerHome from "@/pages/CustomerHome";
 import CustomerLogin from "@/pages/CustomerLogin";
 import CustomerMovieDetail from "@/pages/CustomerMovieDetail";
+import CustomerOrders from "@/pages/CustomerOrders";
 import CustomerRegister from "@/pages/CustomerRegister";
 import CustomerTransaction from "@/pages/CustomerTransaction";
 import CustomerTransactionSuccess from "@/pages/CustomerTransactionSuccess";
@@ -120,6 +121,19 @@ const customerRoutes: RouteObject[] = [
       return true;
     },
     element: <CustomerWalletTopupSuccess />,
+  },
+  {
+    path: "/orders",
+    loader: async () => {
+      const user = getSession();
+
+      if (!user || user.role !== "customer") {
+        throw redirect("/login");
+      }
+
+      return true;
+    },
+    element: <CustomerOrders />,
   },
 ];
 

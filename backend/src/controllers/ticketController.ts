@@ -93,7 +93,7 @@ export const getOrders: RequestHandler = async (
       .select("seats movie theater date status")
       .populate({
         path: "movie",
-        select: "thumbnail title genre -_id",
+        select: "thumbnailUrl title genre -_id",
         populate: {
           path: "genre",
           select: "name -_id",
