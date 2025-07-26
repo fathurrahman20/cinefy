@@ -32,7 +32,7 @@ export default function CustomerRegister() {
         <div className="absolute w-full h-full top-0 bg-[linear-gradient(359.16deg,_#000000_6.6%,_rgba(14,14,36,0)_99.33%)]" />
         <img
           src="/assets/images/backgrounds/signup.png"
-          className="w-full h-full object-cover"
+          className="object-cover w-full h-full"
           alt="background"
         />
       </div>
@@ -64,13 +64,13 @@ export default function CustomerRegister() {
 								<img
 									id="Avatar-Preview"
 									src={URL.createObjectURL(photo)}
-									className="w-full h-full object-cover"
+									className="object-cover w-full h-full"
 									alt="avatar"
 								/>
 							)}
 							<input
 								type="file"
-								className="absolute bottom-0 -left-3/4 -z-30 opacity-0"
+								className="absolute bottom-0 opacity-0 -left-3/4 -z-30"
 								{...register("photo")}
 								ref={inputRef}
 								onChange={(e) => {
@@ -130,7 +130,7 @@ export default function CustomerRegister() {
             Create New Account
           </button>
           <Link
-            to="/sign-in"
+            to="/login"
             className="w-full rounded-full py-3 px-[18px] bg-white/10 text-center font-bold">
             Sign In
           </Link>
