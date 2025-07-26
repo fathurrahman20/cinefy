@@ -133,7 +133,7 @@ export const getOrderDetail: RequestHandler = async (
 
       .populate({
         path: "movie",
-        select: "thumbnail price bonus title genre -_id",
+        select: "thumbnailUrl price bonus title genre -_id",
         populate: {
           path: "genre",
           select: "name -_id",

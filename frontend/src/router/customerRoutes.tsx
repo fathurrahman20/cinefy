@@ -3,6 +3,7 @@ import CustomerBrowseGenre from "@/pages/CustomerBrowse";
 import CustomerHome from "@/pages/CustomerHome";
 import CustomerLogin from "@/pages/CustomerLogin";
 import CustomerMovieDetail from "@/pages/CustomerMovieDetail";
+import CustomerOrderDetail from "@/pages/CustomerOrderDetail";
 import CustomerOrders from "@/pages/CustomerOrders";
 import CustomerRegister from "@/pages/CustomerRegister";
 import CustomerTransaction from "@/pages/CustomerTransaction";
@@ -134,6 +135,23 @@ const customerRoutes: RouteObject[] = [
       return true;
     },
     element: <CustomerOrders />,
+  },
+  {
+    path: "/orders/:orderId",
+    loader: async ({ params }) => {
+      const user = getSession();
+
+      if (!user || user.role !== "customer") {
+        throw redirect("/login");
+      }
+
+      if (!params.orderId) {
+        throw redirect("/");
+      }
+
+      return params.orderId;
+    },
+    element: <CustomerOrderDetail />,
   },
 ];
 
