@@ -18,7 +18,7 @@ export default function CustomerTransactionSuccess() {
           <div className="absolute w-full h-[169px] bottom-0 bg-[linear-gradient(360deg,#000000_6.6%,rgba(14,14,36,0)_99.33%)]" />
           <img
             src="/assets/images/backgrounds/details.png"
-            className="w-full h-full object-cover"
+            className="object-cover w-full h-full"
             alt="background"
           />
         </div>
@@ -48,7 +48,7 @@ export default function CustomerTransactionSuccess() {
               Book More
             </Link>
             <Link
-              to="/my-tickets"
+              to="/orders"
               className="w-full rounded-full p-[12px_18px] bg-white/10 font-bold text-center backdrop-blur-sm">
               View My Tickets
             </Link>

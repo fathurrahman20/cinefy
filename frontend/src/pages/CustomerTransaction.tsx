@@ -76,17 +76,17 @@ export default function CustomerTransaction() {
               alt=""
             />
           </Link>
-          <p className="text-center mx-auto font-semibold text-sm">
+          <p className="mx-auto text-sm font-semibold text-center">
             Tickets Payment
           </p>
-          <div className="dummy-button w-12" />
+          <div className="w-12 dummy-button" />
         </div>
         <div className="flex items-center justify-between gap-2 mx-5">
           <div className="flex items-center gap-[14px]">
             <div className="w-[100px] h-[110px] flex shrink-0 rounded-2xl bg-[#D9D9D9] overflow-hidden">
               <img
                 src={movie?.thumbnailUrl}
-                className="w-full h-full object-cover"
+                className="object-cover w-full h-full"
                 alt="thumbnail"
               />
             </div>
@@ -118,7 +118,7 @@ export default function CustomerTransaction() {
             <p className="font-semibold text-xs leading-[18px]">4/5</p>
             <img
               src="/assets/images/icons/Star 1.svg"
-              className="w-4 h-4 flex shrink-0"
+              className="flex w-4 h-4 shrink-0"
               alt="star"
             />
           </div> */}
@@ -143,7 +143,7 @@ export default function CustomerTransaction() {
             {/* <div className="flex w-[90px] h-20 rounded-2xl bg-[#D9D9D9] overflow-hidden">
               <img
                 src="/assets/images/thumbnails/theater2.png"
-                className="w-full h-full object-cover"
+                className="object-cover w-full h-full"
                 alt="image2"
               />
             </div> */}
@@ -158,7 +158,7 @@ export default function CustomerTransaction() {
             <div className="flex items-center gap-3">
               <img
                 src="/assets/images/icons/calendar-2.svg"
-                className="w-6 h-6 flex shrink-0"
+                className="flex w-6 h-6 shrink-0"
                 alt="icon"
               />
               <p>Date & Time</p>
@@ -169,7 +169,7 @@ export default function CustomerTransaction() {
             <div className="flex items-center gap-3">
               <img
                 src="/assets/images/icons/profile-2user.svg"
-                className="w-6 h-6 flex shrink-0"
+                className="flex w-6 h-6 shrink-0"
                 alt="icon"
               />
               <p>Quantity</p>
@@ -180,7 +180,7 @@ export default function CustomerTransaction() {
             <div className="flex items-center gap-3">
               <img
                 src="/assets/images/icons/ticket-star.svg"
-                className="w-6 h-6 flex shrink-0"
+                className="flex w-6 h-6 shrink-0"
                 alt="icon"
               />
               <p>Seats</p>
@@ -191,7 +191,7 @@ export default function CustomerTransaction() {
             <div className="flex items-center gap-3">
               <img
                 src="/assets/images/icons/coffee-white.svg"
-                className="w-6 h-6 flex shrink-0"
+                className="flex w-6 h-6 shrink-0"
                 alt="icon"
               />
               <p>Bonus</p>
@@ -202,7 +202,7 @@ export default function CustomerTransaction() {
             <div className="flex items-center gap-3">
               <img
                 src="/assets/images/icons/dollar-circle.svg"
-                className="w-6 h-6 flex shrink-0"
+                className="flex w-6 h-6 shrink-0"
                 alt="icon"
               />
               <p>Price</p>
@@ -213,7 +213,7 @@ export default function CustomerTransaction() {
             <div className="flex items-center gap-3">
               <img
                 src="/assets/images/icons/receipt-item.svg"
-                className="w-6 h-6 flex shrink-0"
+                className="flex w-6 h-6 shrink-0"
                 alt="icon"
               />
               <p>Sub Total</p>
@@ -224,7 +224,7 @@ export default function CustomerTransaction() {
             <div className="flex items-center gap-3">
               <img
                 src="/assets/images/icons/receipt-disscount.svg"
-                className="w-6 h-6 flex shrink-0"
+                className="flex w-6 h-6 shrink-0"
                 alt="icon"
               />
               <p>PPN 11%</p>
@@ -235,7 +235,7 @@ export default function CustomerTransaction() {
             <div className="flex items-center gap-3">
               <img
                 src="/assets/images/icons/menu-board.svg"
-                className="w-6 h-6 flex shrink-0"
+                className="flex w-6 h-6 shrink-0"
                 alt="icon"
               />
               <p>Booking Fee</p>
@@ -246,7 +246,7 @@ export default function CustomerTransaction() {
 						<div className="flex items-center gap-3">
 							<img
 								src="/assets/images/icons/ticket-expired.svg"
-								className="w-6 h-6 flex shrink-0"
+								className="flex w-6 h-6 shrink-0"
 								alt="icon"
 							/>
 							<p>Discount</p>
@@ -257,7 +257,7 @@ export default function CustomerTransaction() {
             <div className="flex items-center gap-3">
               <img
                 src="/assets/images/icons/note-favorite.svg"
-                className="w-6 h-6 flex shrink-0"
+                className="flex w-6 h-6 shrink-0"
                 alt="icon"
               />
               <p>Grand Total</p>
@@ -273,7 +273,7 @@ export default function CustomerTransaction() {
         <div className="relative flex flex-col w-full max-w-[353px] rounded-[30px] bg-white/10 overflow-hidden">
           <img
             src="/assets/images/backgrounds/wallet-lines.svg"
-            className="absolute w-full h-full object-cover"
+            className="absolute object-cover w-full h-full"
             alt=""
           />
           <img
@@ -287,15 +287,15 @@ export default function CustomerTransaction() {
           <div className="flex items-center justify-between p-[10px_14px] pl-6 bg-white/20 backdrop-blur-3xl mt-[21px]">
             <div className="flex flex-col gap-[2px]">
               <p className="text-xs leading-[18px]">Name</p>
-              <p className="font-semibold text-sm">{user?.name}</p>
+              <p className="text-sm font-semibold">{user?.name}</p>
             </div>
             <div className="flex flex-col gap-[2px]">
               <p className="text-xs leading-[18px]">Expired At</p>
-              <p className="font-semibold text-sm">02/30</p>
+              <p className="text-sm font-semibold">02/30</p>
             </div>
             <div className="flex flex-col gap-[2px]">
               <p className="text-xs leading-[18px]">Branch</p>
-              <p className="font-semibold text-sm">HQ</p>
+              <p className="text-sm font-semibold">HQ</p>
             </div>
           </div>
         </div>
@@ -306,7 +306,7 @@ export default function CustomerTransaction() {
             Saldo Ewallet anda tidak mencukupi untuk saat ini
           </p>
           <Link
-            to="/wallet/topup"
+            to="/wallets/topup"
             className="rounded-full p-[12px_18px] bg-white font-bold text-premiere-black">
             Topup
           </Link>
@@ -315,12 +315,12 @@ export default function CustomerTransaction() {
       {isBalanceEnough && (
         <div>
           <div className="flex items-center gap-3 px-5 mt-5">
-            <label className="group relative">
+            <label className="relative group">
               <input
                 type="checkbox"
                 name="city"
                 id=""
-                className="w-6 h-6 rounded-lg appearance-none checked:border-4 checked:border-solid checked:border-premiere-black checked:bg-premiere-purple ring-1 ring-premiere-purple transition-all duration-300"
+                className="w-6 h-6 transition-all duration-300 rounded-lg appearance-none checked:border-4 checked:border-solid checked:border-premiere-black checked:bg-premiere-purple ring-1 ring-premiere-purple"
               />
             </label>
             <p>
