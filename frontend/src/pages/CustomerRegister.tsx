@@ -126,8 +126,8 @@ export default function CustomerRegister() {
           <button
             disabled={isPending}
             type="submit"
-            className="w-full rounded-full py-3 px-[18px] bg-cyan-700 text-center font-bold text-premiere-black">
-            Create New Account
+            className="w-full rounded-full py-3 px-[18px] bg-white text-center font-bold text-premiere-black">
+            {isPending ? "Loading..." : "Create New Account"}
           </button>
           <Link
             to="/login"

@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function ComingSoonMovieList() {
-  const { data: movies } = useGetMovies("false");
+  const { data: movies, isLoading } = useGetMovies("false");
   return (
     <section id="Coming-Soon" className="flex flex-col gap-4 mt-5">
       <h2 className="font-semibold px-5">Coming Soon</h2>
@@ -14,9 +14,21 @@ export default function ComingSoonMovieList() {
           slidesOffsetBefore={20}
           slidesOffsetAfter={20}
           className="swiper-wrapper">
+          {isLoading && (
+            <>
+              {[1, 2, 3].map((item) => (
+                <SwiperSlide key={item} className="swiper-slide !w-fit">
+                  <div role="status" className="max-w-sm animate-pulse">
+                    <div className="h-48 bg-gray-200 rounded-3xl dark:bg-gray-700 w-48 mb-4" />
+                    <span className="sr-only">Loading...</span>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </>
+          )}
           {movies?.map((item) => (
             <SwiperSlide key={item._id} className="swiper-slide !w-fit">
-              <Link to="/" className="card">
+              <Link to={`/movie/${item._id}`} className="card">
                 <div className="relative flex w-[240px] h-[300px] shrink-0 rounded-3xl bg-[#D9D9D9] overflow-hidden">
                   <img
                     src={item.thumbnailUrl}

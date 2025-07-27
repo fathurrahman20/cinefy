@@ -73,8 +73,8 @@ export default function CustomerLogin() {
           <button
             type="submit"
             disabled={isPending}
-            className="w-full rounded-full py-3 px-[18px] bg-cyan-700 text-center font-bold text-premiere-black">
-            Sign In to My Account
+            className="w-full rounded-full py-3 px-[18px] bg-white text-center font-bold text-premiere-black">
+            {isPending ? "Loading..." : "Sign In to My Account"}
           </button>
           <Link
             to="/register"

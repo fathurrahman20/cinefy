@@ -1,21 +1,11 @@
-import { cn, getSession } from "@/lib/utils";
-import { Link, useNavigate } from "react-router";
+import { cn } from "@/lib/utils";
+import { Link } from "react-router";
 
 interface BottomBarProps {
   activeLink?: "discover" | "tickets" | "wallet" | "settings";
 }
 
 export default function MenuBar({ activeLink }: BottomBarProps) {
-  const user = getSession();
-  const navigate = useNavigate();
-
-  const handleContinue = (target: string): string => {
-    if (!user || user.role !== "customer") {
-      navigate("/login");
-      return "/login";
-    }
-    return target;
-  };
   return (
     <div id="Bottom-Nav" className="relative w-full h-[123px] flex shrink-0">
       <nav className="fixed bottom-5 left-5 right-5 mx-auto flex items-center w-fit rounded-full p-[10px_14px] gap-[14px] bg-[#FFFFFF33] z-20 backdrop-blur-md">
@@ -33,7 +23,7 @@ export default function MenuBar({ activeLink }: BottomBarProps) {
           <p className="text-sm font-semibold text-white">Discover</p>
         </Link>
         <Link
-          to={handleContinue("/orders")}
+          to="/orders"
           className={cn(
             "flex items-center shrink-0 rounded-3xl p-3 gap-3 w-12 h-12 bg-[#FFFFFF33] overflow-hidden transition-all duration-300 hover:invert hover:bg-black",
             activeLink === "tickets" ? "!w-fit pr-4 bg-black invert" : "w-12"
@@ -46,7 +36,7 @@ export default function MenuBar({ activeLink }: BottomBarProps) {
           <p className="text-sm font-semibold text-white">Tickets</p>
         </Link>
         <Link
-          to={handleContinue("/wallets")}
+          to="/wallets"
           className={cn(
             "flex items-center shrink-0 rounded-3xl p-3 gap-3 w-12 h-12 bg-[#FFFFFF33] overflow-hidden transition-all duration-300 hover:invert hover:bg-black",
             activeLink === "wallet" ? "!w-fit pr-4 bg-black invert" : "w-12"
@@ -59,7 +49,7 @@ export default function MenuBar({ activeLink }: BottomBarProps) {
           <p className="text-sm font-semibold text-white">E-Wallet</p>
         </Link>
         <Link
-          to={handleContinue("/settings")}
+          to="/settings"
           className={cn(
             "flex items-center shrink-0 rounded-3xl p-3 gap-3 w-12 h-12 bg-[#FFFFFF33] overflow-hidden transition-all duration-300 hover:invert hover:bg-black",
             activeLink === "settings" ? "!w-fit pr-4 bg-black invert" : "w-12"

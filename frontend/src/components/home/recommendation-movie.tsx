@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function RecommendationMovie() {
-  const { data: movies } = useGetMovies();
+  const { data: movies, isLoading } = useGetMovies();
   return (
     <div className="swiper-recommendations px-5">
       <Swiper
@@ -12,6 +12,18 @@ export default function RecommendationMovie() {
         slidesOffsetBefore={20}
         slidesOffsetAfter={20}
         className="swiper-wrapper w-full overflow-hidden mt-5">
+        {isLoading && (
+          <>
+            {[1, 2, 3].map((item) => (
+              <SwiperSlide key={item} className="swiper-slide !w-fit">
+                <div role="status" className="max-w-sm animate-pulse">
+                  <div className="h-36 bg-gray-200 rounded-3xl dark:bg-gray-700 w-48 mb-4" />
+                  <span className="sr-only">Loading...</span>
+                </div>
+              </SwiperSlide>
+            ))}
+          </>
+        )}
         {movies?.map((item) => (
           <SwiperSlide key={item._id} className="swiper-slide !w-fit">
             <Link to={`/movie/${item._id}`} className="card">
